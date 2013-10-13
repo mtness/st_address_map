@@ -10,7 +10,7 @@
 function user_st_addressmapOnCurrentPage($mode = '') {
 
 	$result = FALSE;
-	if ($mode == '1') { return true; }
+	if ($mode == '1') { return TRUE; }
 
 	if (TYPO3_MODE == 'FE') {
 		$ttContentWhere = 'AND deleted = 0 AND hidden = 0';
