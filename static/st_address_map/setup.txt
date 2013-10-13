@@ -70,6 +70,7 @@ plugin.tx_staddressmap_pi1 {
 	radiusfields = {$plugin.tx_staddressmap_pi1.radiusfields}
 	searchradius = {$plugin.tx_staddressmap_pi1.searchradius}
 	radiuscountry = {$plugin.tx_staddressmap_pi1.radiuscountry}
+	searchradiusfe = {$plugin.tx_staddressmap_pi1.searchradiusfe}
 	circle = {$plugin.tx_staddressmap_pi1.circle}
 	circleStrokeColor = {$plugin.tx_staddressmap_pi1.circleStrokeColor}
 	circleStrokeOpacity = {$plugin.tx_staddressmap_pi1.circleStrokeOpacity}

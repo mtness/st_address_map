@@ -91,26 +91,38 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$addresslist = explode(',', $addresslist);
 		$addresslist = implode(' or pid = ', $addresslist);
 
-		$content_id 		= $this->cObj->data['uid'];
+		$content_id = $this->cObj->data['uid'];
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'] . ',';
 
 		/* ----- Ajax ----- */
 		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) {
-			return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields);
+			return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields, t3lib_div::_GET('rad'));
 		}
 		/* ----- selectfields ----- */
 		foreach (preg_split('/\s?,\s?/', $this->conf['dropdownfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $groupBy = $value, $orderBy = $value, $limit = '');
-			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
-				$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
-				foreach($res as $row) {
-					$option .= '<option value="' . $row[$value] . '">' . $row[$value] . '</option>';
+			$option = '';
+			// Frontend RadiusSelectField
+			if($value == 'radiusselect') {
+				$selectrad = explode(',', $this->conf['searchradiusfe']);
+				$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_'.$value.'"><option value="-1">'.$this->pi_getLL('please_select').'</option>';
+				foreach($selectrad as $row) {
+					$option .= '<option value="' . $row . '">' . $row . ' km</option>';
 				}
 				$option .= '</select>';
-			}  else {
-				return $this->pi_getLL('nodata');
+				$markerArray['###' . strtoupper($value) . '###'] = $option;
+			} else {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $groupBy = $value, $orderBy = $value, $limit = '');
+				if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
+					$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
+					foreach($res as $row) {
+						$option .= '<option value="' . $row[$value] . '">' . $row[$value] . '</option>';
+					}
+					$option .= '</select>';
+				}  else {
+					return $this->pi_getLL('nodata');
+				}
+				$markerArray['###' . strtoupper($value) . '###'] = $option;
 			}
-			$markerArray['###' . strtoupper($value) . '###'] = $option;
 		}
 
 		/* ----- inputfields ----- */
@@ -203,7 +215,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		return array($lat, $lng);
 	}
 
-	private function gimmeData($var, $cid, $what, $tablefields) {
+	private function gimmeData($var, $cid, $what, $tablefields, $rad=20000) {
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
@@ -219,8 +231,13 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			return $this->pi_getLL('nodata');
 		}
 
-		foreach ($flexform['data']['sDEF']['lDEF'] as $key => $value) { $$key = reset($value); }
-		$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
+		foreach ($flexform['data']['sDEF']['lDEF'] as $key => $value) {
+			$$key = reset($value);
+		}
+
+		if(!$rad || $rad == -1) {
+			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
+		}
 		// ----- set addresslist ------
 		$addresslist = explode(',', $addresslist);
 		$addresslist = implode(' or pid = ', $addresslist);
