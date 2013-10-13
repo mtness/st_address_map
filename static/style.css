@@ -49,6 +49,11 @@ table.bubble, table.bubble td, table.bubble th {
   padding: 0;
 }
 
+table.bubble {
+  min-width: 250px;
+  height: 100px;
+}
+
 .tx_staddressmap_submit:hover {
   cursor: pointer;
 }
