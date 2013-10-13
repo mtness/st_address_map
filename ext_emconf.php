@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* **************************************************************
  * Extension Manager/Repository config file for ext "st_address_map".
  *
  * Auto generated 03-05-2013 01:27
@@ -8,7 +8,7 @@
  * Manual updates:
  * Only the data in the array - everything else is removed by next
  * writing. "version" and "dependencies" must not be touched!
- ***************************************************************/
+ ************************************************************** */
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Address visualization with Google Maps',
