@@ -27,7 +27,7 @@
  * Hint: use extdeveval to insert/update function index above.
  */
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
+require_once(PATH_tslib . 'class.tslib_pibase.php');
 
 
 /**
@@ -38,10 +38,10 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  * @subpackage	tx_staddressmap
  */
 class tx_staddressmap_pi1 extends tslib_pibase {
-	var $prefixId		= 'tx_staddressmap_pi1';		// Same as class name
-	var $scriptRelPath	= 'pi1/class.tx_staddressmap_pi1.php';	// Path to this script relative to the extension dir.
-	var $extKey			= 'st_address_map';	// The extension key.
-	var $pi_checkCHash	= true;
+	var $prefixId = 'tx_staddressmap_pi1';		// Same as class name
+	var $scriptRelPath = 'pi1/class.tx_staddressmap_pi1.php';	// Path to this script relative to the extension dir.
+	var $extKey = 'st_address_map';	// The extension key.
+	var $pi_checkCHash = TRUE;
 
 	/**
 	 * The main method of the PlugIn
@@ -58,7 +58,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$errormessage = '';
 
 		if($this->conf['fancyselect'] == 1) {
-			$GLOBALS['TSFE']->additionalFooterData[$extKey.'_85'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath($this->extKey).'static/selectbox/jquery.selectbox-0.1.3.min.js"></script>
+			$GLOBALS['TSFE']->additionalFooterData[$extKey . '_85'] = '<script type="text/javascript" src="' . t3lib_extMgm::siteRelPath($this->extKey) . 'static/selectbox/jquery.selectbox-0.1.3.min.js"></script>
 			<script type="text/javascript">
 				$(function () {
     				$(".tx_staddressmap_select").selectbox(
@@ -66,7 +66,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 					);
 				});
 			</script>';
-			$GLOBALS['TSFE']->additionalHeaderData[$this->extKey.'_86']		= '<link href="'.t3lib_extMgm::siteRelPath($this->extKey).'static/selectbox/jquery.selectbox.css" rel="stylesheet" type="text/css" />';
+			$GLOBALS['TSFE']->additionalHeaderData[$this->extKey . '_86'] = '<link href="' .t3lib_extMgm::siteRelPath($this->extKey) . 'static/selectbox/jquery.selectbox.css" rel="stylesheet" type="text/css" />';
 		}
 
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
@@ -85,104 +85,101 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				}
 			}
 		}
-		if($errormessage != '') return '<div class="error">'.$errormessage.'</div>';
+		if($errormessage != '') return '<div class="error">' . $errormessage . '</div>';
 
 		// set addresslist
-		$addresslist = explode(',',$addresslist);
-		$addresslist = implode(' or pid = ',$addresslist);
+		$addresslist = explode(',', $addresslist);
+		$addresslist = implode(' or pid = ', $addresslist);
 
 		$content_id 		= $this->cObj->data['uid'];
 		$layout_style		= $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['list_style'];
-		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'].',' ;
+		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'] . ',';
 
 		/* ----- Ajax ----- */
-		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) 		return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'),$tablefields);
+		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields);
 
 		/* ----- selectfields ----- */
-		foreach (preg_split('/\s?,\s?/',$this->conf['dropdownfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,'. $value,'tt_address','(pid = '.$addresslist.') AND (hidden=0 AND deleted=0)',$groupBy = $value,$orderBy = $value,$limit = '');
+		foreach (preg_split('/\s?,\s?/', $this->conf['dropdownfields']) as $value) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $groupBy = $value, $orderBy = $value, $limit = '');
 			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
-				$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_'.$value.'"><option value="-1">'.$this->pi_getLL('please_select').'</option>';
+				$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
 				foreach($res as $row) {
-					$option .= '<option value="'.$row[$value].'">'.$row[$value].'</option>';
+					$option .= '<option value="' . $row[$value] . '">' . $row[$value] . '</option>';
 				}
 				$option .= '</select>';
 			}  else {
 				return $this->pi_getLL('nodata');
 			}
-			$markerArray['###'.strtoupper($value).'###'] = $option;
+			$markerArray['###' . strtoupper($value) . '###'] = $option;
 		}
 
 		/* ----- inputfields ----- */
-		foreach (preg_split('/\s?,\s?/',$this->conf['inputfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value,'tt_address','hidden=0 AND deleted=0',$groupBy = $value,$orderBy = $value,$limit = '');
+		foreach (preg_split('/\s?,\s?/', $this->conf['inputfields']) as $value) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value, 'tt_address', 'hidden=0 AND deleted=0', $groupBy = $value, $orderBy = $value, $limit = '');
 			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 				foreach($res as $row) {
-					$option = '<input class="tx_staddressmap_input" id="tx_staddressmap_input_'.$value.'" value="" />';
+					$option = '<input class="tx_staddressmap_input" id="tx_staddressmap_input_' . $value . '" value="" />';
 				}
 			}  else {
 				return $this->pi_getLL('nodata');
 			}
-			$markerArray['###'.strtoupper($value).'###'] = $option;
+			$markerArray['###' . strtoupper($value) . '###'] = $option;
 		}
 
-		# ----- Map -----
+		/* ----- Map ----- */
 		if($this->conf['seeatstart'] == 1) {
-			$maps = '<input id="tx_staddressmap_seeatstart" type="hidden" value="1" /><input id="tx_staddressmap_order" type="hidden" value="'.$this->conf['orderall'].'" />';
+			$maps = '<input id="tx_staddressmap_seeatstart" type="hidden" value="1" /><input id="tx_staddressmap_order" type="hidden" value="' . $this->conf['orderall'] . '" />';
 		}
 
-		$maps .= '<input id="tx_staddressmap_cid" type="hidden" value="'.$content_id.'" /><div id="tx_staddressmap_gmap_'.$content_id.'" class="tx_staddressmap_gmap" style="width: '.$mapwidth.'px; height: '.$mapheight.'px"></div>';
+		$maps .= '<input id="tx_staddressmap_cid" type="hidden" value="' . $content_id . '" /><div id="tx_staddressmap_gmap_' . $content_id . '" class="tx_staddressmap_gmap" style="width: ' . $mapwidth . 'px; height: ' . $mapheight . 'px"></div>';
 
-		# ----- Mapsjavascript -----
+		/* ----- Mapsjavascript ----- */
 
-		$bubblemarker = ($this->conf['bubblemarker']) ? 'var icon = "'.$this->conf['bubblemarker'].'";' : 'var icon = "";' ;
-		$GLOBALS['TSFE']->additionalFooterData[$this->extKey.'_665_'.$content_id]	= '
+		$bubblemarker = ($this->conf['bubblemarker']) ? 'var icon = "' . $this->conf['bubblemarker'] . '";' : 'var icon = "";';
+		$GLOBALS['TSFE']->additionalFooterData[$this->extKey . '_665_' . $content_id] = '
 			<script type="text/javascript">
-			
 			var map;
 			var circle = null;
 			var circledata = null;
 			var marker = new Array();
 			var centerpoints = new Array();
 			var detailzoom = new Array();
-			
 			var city_marker = new Array();
 			var city_centerpoints = new Array();
 			var city_detailzoom = new Array();
-			
 			var region_marker = new Array();
 			var region_centerpoints = new Array();
 			var region_detailzoom = new Array();
-			'.$bubblemarker.'
+			' . $bubblemarker . '
 			
-				function initialize(){
-				var latlng = new google.maps.LatLng('.$center_coordinates.');
-				var myMap_'.$content_id.' = {
-					zoom: '.$start_zoom.',
+			function initialize(){
+				var latlng = new google.maps.LatLng(' . $center_coordinates . ');
+				var myMap_' . $content_id . ' = {
+					zoom: ' . $start_zoom . ',
 					center: latlng,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
-				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_'.$content_id.'"), myMap_'.$content_id.');
+				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_' . $content_id . '"), myMap_' . $content_id . ');
 			}
 			
-	        </script>';
+			</script>';
 
 		$markerArray['###MAPS###'] = $maps;
-		$markerArray['###ADDRESSLIST###'] = '<div id="tx_staddressmap_addresslist_'.$content_id.'" class="tx_staddressmap_addresslist"></div>';
+		$markerArray['###ADDRESSLIST###'] = '<div id="tx_staddressmap_addresslist_' . $content_id . '" class="tx_staddressmap_addresslist"></div>';
 
 		if($this->conf['searchbutton'] == 1) {
-			$markerArray['###SEARCHBUTTON###'] = '<input class="tx_staddressmap_submit" type="submit" value="'.$this->pi_getLL('search').'" />';
+			$markerArray['###SEARCHBUTTON###'] = '<input class="tx_staddressmap_submit" type="submit" value="' . $this->pi_getLL('search') . '" />';
 		} else {
 			$markerArray['###SEARCHBUTTON###'] = '';
 		}
 
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray).'<div style="display:none" id="tx_staddressmap_addresslist_pageid">'.$GLOBALS["TSFE"]->id.'</div><div style="display:none" id="tx_staddressmap_addresslist_ajaxtypenumb">'.$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'].'</div>';
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray) . '<div style="display:none" id="tx_staddressmap_addresslist_pageid">' . $GLOBALS['TSFE']->id . '</div><div style="display:none" id="tx_staddressmap_addresslist_ajaxtypenumb">' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'] . '</div>';
 		return $this->pi_wrapInBaseClass($content);
 	}
 
 	private function checkEmptyFields($key) {
-		return $this->pi_getLL('error_empty_'.$key);
+		return $this->pi_getLL('error_empty_' . $key);
 	}
 
 
@@ -195,7 +192,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 	function getMapsCoordinates($data){
 		$json = t3lib_div::getUrl('https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=de&address=' . urlencode($data));
-		$jsonDecoded = json_decode($json, true);
+		$jsonDecoded = json_decode($json, TRUE);
 		if (!empty($jsonDecoded['results'])) {
 			$lat = $jsonDecoded['results']['0']['geometry']['location']['lat'];
 			$lng = $jsonDecoded['results']['0']['geometry']['location']['lng'];
@@ -210,9 +207,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
-		$singlerow=$this->cObj->getSubpart($subpart,'###ROW###');
+		$singlerow=$this->cObj->getSubpart($subpart, '###ROW###');
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform','tt_content','(hidden=0 and deleted=0) and uid='.$cid,$groupBy = '',$orderBy = '',$limit = '');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', '(hidden=0 and deleted=0) and uid=' . $cid, $groupBy = '', $orderBy = '', $limit = '');
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 			while($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$flexform	= t3lib_div::xml2array($row['pi_flexform']);
@@ -222,23 +219,23 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 		foreach ($flexform['data']['sDEF']['lDEF'] as $key => $value) { $$key = reset($value); }
-		$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
-		#// set addresslist
-		$addresslist = explode(',',$addresslist);
-		$addresslist = implode(' or pid = ',$addresslist);
+		$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
+		// ----- set addresslist ------
+		$addresslist = explode(',', $addresslist);
+		$addresslist = implode(' or pid = ', $addresslist);
 
-		// radius
+		//  ----- radius -----
 		$js_circle = 'circledata = null;';
-		if(in_array($what, preg_split('/\s?,\s?/',$this->conf['radiusfields']))) {
+		if(in_array($what, preg_split('/\s?,\s?/', $this->conf['radiusfields']))) {
 			// radius
-			$rc = ($this->conf['radiuscountry']) ? ','.$this->conf['radiuscountry'] : '' ;
-			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v').$rc))));
+			$rc = ($this->conf['radiuscountry']) ? ',' . $this->conf['radiuscountry'] : '';
+			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc))));
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid,  '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng,
-				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['1'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['1'].')) * cos(RADIANS('.$koord['0'].') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
+				'uid,  ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng,
+				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['1'] . ')) * cos(RADIANS(' . $koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
 				'tt_address',
-				'(hidden=0 AND deleted=0) AND (pid = '.$addresslist.') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['1'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['1'].')) * cos(RADIANS('.$koord['0'].') -  RADIANS(tx_staddressmap_lng))) <= '.$rad,
+				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['1'] . ')) * cos(RADIANS(' . $koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) <= ' . $rad,
 				$groupBy = '',
 				$orderBy = 'EAdvanced',
 				$limit = ''
@@ -248,14 +245,14 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			if($this->conf['circle'] == 1) {
 				$js_circle .= '
 					circledata = {
-						strokeColor: "'.$this->conf['circleStrokeColor'].'",
-						strokeOpacity: '.$this->conf['circleStrokeOpacity'].',
-						strokeWeight: '.$this->conf['circleStrokeWeight'].',
-						fillColor: "'.$this->conf['circlefillColor'].'",
-						fillOpacity: '.$this->conf['circlefillOpacity'].',
+						strokeColor: "' . $this->conf['circleStrokeColor'] . '",
+						strokeOpacity: ' . $this->conf['circleStrokeOpacity'] . ',
+						strokeWeight: ' . $this->conf['circleStrokeWeight'] . ',
+						fillColor: "' . $this->conf['circlefillColor'] . '",
+						fillOpacity: ' . $this->conf['circlefillOpacity'] . ',
 						map: map,
-						center: new google.maps.LatLng('.$koord['1'].', '.$koord['0'].'),
-						radius: '.($rad*1000).'
+						center: new google.maps.LatLng(' . $koord['1'] . ', ' . $koord['0'] . '),
+						radius: ' . ($rad*1000) . '
 					};
 				';
 			}
@@ -272,11 +269,11 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		// see all
 		if(t3lib_div::_GET('all') == 1) {
-			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
+			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
-				'uid, '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng',
+				'uid, ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
-				'(hidden=0 and deleted=0) and (pid = '.$addresslist.')',
+				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ')',
 				$groupBy = '',
 				$orderBy = t3lib_div::_GET('order'),
 				$limit = ''
@@ -288,8 +285,8 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$ji = 0;
 			$common_lat = array();
 			$common_lng = array();
-			$js_output = '<script type="text/javascript">'."\n";
-			$js_output .= 'var a = new Array();'."\n";
+			$js_output = '<script type="text/javascript">' . "\n";
+			$js_output .= 'var a = new Array();' . "\n";
 
 			foreach($res as $row) {
 				if($row['tx_staddressmap_lat'] == 0 || $row['tx_staddressmap_lng'] == 0) {
@@ -305,22 +302,22 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				}
 
 				// begin js
-				$js_output .= 'a[' . $ji . '] = new Object();'."\n";
+				$js_output .= 'a[' . $ji . '] = new Object();' . "\n";
 				// begin bubbletext
 				$bubbletext = '';
 				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields']) as $tvalue) {
 					if($row[$tvalue]) {
 						$bubblewrap = $this->conf['bubblelayout.'][$tvalue] ? $this->conf['bubblelayout.'][$tvalue] : '|';
 						if($tvalue == 'email') {
-							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a',"'",'"'), array("tx_addressmap_replace","|-|","-|-"), $this->cObj->mailto_makelinks('mailto:'.$row[$tvalue], '')),$bubblewrap);
+							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a', "'", '"'), array("tx_addressmap_replace", "|-|", "-|-"), $this->cObj->mailto_makelinks('mailto:' . $row[$tvalue], '')), $bubblewrap);
 						} else {
-							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0)), $bubblewrap);
+							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue], ENT_COMPAT, 'UTF-8', 0)), $bubblewrap);
 						}
 					}
 				}
 
 				// list
-				foreach (preg_split('/\s?,\s?/',$tablefields) as $tvalue) {
+				foreach (preg_split('/\s?,\s?/', $tablefields) as $tvalue) {
 					if($row[$tvalue]) {
 						$listwrap = $this->conf['listlayout.'][$tvalue] ? $this->conf['listlayout.'][$tvalue] : '|';
 						$markerArray['###' . strtoupper($tvalue) . '###'] = t3lib_TStemplate::wrap(nl2br($row[$tvalue]), $listwrap);
@@ -329,47 +326,46 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 					}
 				}
 
-				$bubbletext = t3lib_TStemplate::wrap($bubbletext,$this->conf['bubblelayout.']['wrap']);
-				$js_output .= 'a['.$ji.'].name = \''.$bubbletext.'\''."\n";
-				$js_output .= 'a['.$ji.'].lat = '.$row['tx_staddressmap_lat'].';'."\n";
-				$js_output .= 'a['.$ji.'].lng = '.$row['tx_staddressmap_lng'].';'."\n";
+				$bubbletext = t3lib_TStemplate::wrap($bubbletext, $this->conf['bubblelayout.']['wrap']);
+				$js_output .= 'a[' . $ji . '].name = \'' . $bubbletext . '\'' . "\n";
+				$js_output .= 'a[' . $ji . '].lat = ' . $row['tx_staddressmap_lat'] . ';' . "\n";
+				$js_output .= 'a[' . $ji . '].lng = ' . $row['tx_staddressmap_lng'] . ';' . "\n";
 
-				# ----- Calculate average coordinates
+				// ----- Calculate average coordinates
 				$common_lat[] = $row['tx_staddressmap_lat'];
 				$common_lng[] = $row['tx_staddressmap_lng'];
 				$ji++;
 
-				$markerArray['###DISTANCE###'] = ($this->conf['radiusfields'] != '' && round($row['EAdvanced'], 1) > 0) ? t3lib_TStemplate::wrap(round($row['EAdvanced'], 1).' km',$this->conf['listlayout.']['distance']) : '' ;
+				$markerArray['###DISTANCE###'] = ($this->conf['radiusfields'] != '' && round($row['EAdvanced'], 1) > 0) ? t3lib_TStemplate::wrap(round($row['EAdvanced'], 1) . ' km', $this->conf['listlayout.']['distance']) : '';
 
-				$adresslistrow .= $this->cObj->substituteMarkerArrayCached($singlerow,$markerArray);
+				$adresslistrow .= $this->cObj->substituteMarkerArrayCached($singlerow, $markerArray);
 			}
-			$js_output .= 'marker[0] = a;'."\n";
-			$js_output .= 'centerpoints[0] = new Object();'."\n";
+			$js_output .= 'marker[0] = a;' . "\n";
+			$js_output .= 'centerpoints[0] = new Object();' . "\n";
 
-			if(in_array($what, preg_split('/\s?,\s?/',$this->conf['radiusfields']))) {
-				$js_output .= 'centerpoints[0].lat = '.$koord['1'].';'."\n";
-				$js_output .= 'centerpoints[0].lng = '.$koord['0'].';'."\n";
+			if(in_array($what, preg_split('/\s?,\s?/', $this->conf['radiusfields']))) {
+				$js_output .= 'centerpoints[0].lat = ' . $koord['1'] . ';' . "\n";
+				$js_output .= 'centerpoints[0].lng = ' . $koord['0'] . ';' . "\n";
 			} else {
-				$js_output .= 'centerpoints[0].lat = '.((max($common_lat)+min($common_lat))/2).';'."\n";
-				$js_output .= 'centerpoints[0].lng = '.((max($common_lng)+min($common_lng))/2).';'."\n";
+				$js_output .= 'centerpoints[0].lat = ' . ((max($common_lat)+min($common_lat))/2) . ';' . "\n";
+				$js_output .= 'centerpoints[0].lng = ' . ((max($common_lng)+min($common_lng))/2) . ';' . "\n";
 			}
 
-			$js_output .= 'detailzoom[0] = new Object();'."\n";
-			$js_output .= 'detailzoom[0] = '.$detail_zoom.';'."\n";
+			$js_output .= 'detailzoom[0] = new Object();' . "\n";
+			$js_output .= 'detailzoom[0] = ' . $detail_zoom . ';' . "\n";
 			$js_output .= $js_circle;
 			$js_output .= '</script>';
 
 		}  else {
-			return $this->pi_getLL('nodata').'<script type="text/javascript">marker = new Array();</script>';
+			return $this->pi_getLL('nodata') . '<script type="text/javascript">marker = new Array();</script>';
 		}
 
 		$subpartArray['###ROW###'] = $adresslistrow;
 		$markerArray['###JSOUTPUT###'] = $js_output;
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,$subpartArray,array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, $subpartArray, array());
 		return $this->pi_wrapInBaseClass($content);
 	}
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/st_address_map/pi1/class.tx_staddressmap_pi1.php'])	{
