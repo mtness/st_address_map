@@ -75,11 +75,14 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###TEMPLATE###');
 
 		// errorhandling
-		foreach ($this->cObj->data['pi_flexform']['data']['sDEF']['lDEF'] as $key => $value) {
-			$$key = reset($value);
-			if(reset($value) == '') {
-				$errormessage .= $this->checkEmptyFields($key);
-				if($errormessage != '') $errormessage .= '<br />';
+		$mapsettings = $this->cObj->data['pi_flexform']['data']['sDEF']['lDEF'];
+		if (is_array($mapsettings)) {
+			foreach ($mapsettings as $key => $value) {
+				$$key = reset($value);
+				if(reset($value) == '') {
+					$errormessage .= $this->checkEmptyFields($key);
+					if($errormessage != '') $errormessage .= '<br />';
+				}
 			}
 		}
 		if($errormessage != '') return '<div class="error">'.$errormessage.'</div>';
@@ -288,7 +291,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$js_output = '<script type="text/javascript">'."\n";
 			$js_output .= 'var a = new Array();'."\n";
 
-			foreach($res as $key => $row) {
+			foreach($res as $row) {
 				if($row['tx_staddressmap_lat'] == 0 || $row['tx_staddressmap_lng'] == 0) {
 					$newkoord = $this->getMapsCoordinates($row['zip'] . ' ' . $row['city'] . ',' . $row['address'] . ',' . $row['country']);
 					$koor_update = array();
