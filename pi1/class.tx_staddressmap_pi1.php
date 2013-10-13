@@ -92,7 +92,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$addresslist = implode(' or pid = ', $addresslist);
 
 		$content_id 		= $this->cObj->data['uid'];
-		$layout_style		= $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['list_style'];
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'] . ',';
 
 		/* ----- Ajax ----- */
@@ -226,18 +225,18 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$addresslist = explode(',', $addresslist);
 		$addresslist = implode(' or pid = ', $addresslist);
 
-		//  ----- radius -----
+		//  ----- Radius search -----
 		$js_circle = 'circledata = null;';
 		if(in_array($what, preg_split('/\s?,\s?/', $this->conf['radiusfields']))) {
 			// radius
 			$rc = ($this->conf['radiuscountry']) ? ',' . $this->conf['radiuscountry'] : '';
-			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc))));
+			$koord = $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc);
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'uid,  ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng,
-				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['1'] . ')) * cos(RADIANS(' . $koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
+				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['0'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['0'] . ')) * cos(RADIANS(' . $koord['1'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
 				'tt_address',
-				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['1'] . ')) * cos(RADIANS(' . $koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) <= ' . $rad,
+				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['0'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['0'] . ')) * cos(RADIANS(' . $koord['1'] . ') -  RADIANS(tx_staddressmap_lng))) <= ' . $rad,
 				$groupBy = '',
 				$orderBy = 'EAdvanced',
 				$limit = ''
@@ -253,7 +252,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 						fillColor: "' . $this->conf['circlefillColor'] . '",
 						fillOpacity: ' . $this->conf['circlefillOpacity'] . ',
 						map: map,
-						center: new google.maps.LatLng(' . $koord['1'] . ', ' . $koord['0'] . '),
+						center: new google.maps.LatLng(' . $koord['0'] . ', ' . $koord['1'] . '),
 						radius: ' . ($rad*1000) . '
 					};
 				';
