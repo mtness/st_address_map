@@ -96,8 +96,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'] . ',';
 
 		/* ----- Ajax ----- */
-		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields);
-
+		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) {
+			return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields);
+		}
 		/* ----- selectfields ----- */
 		foreach (preg_split('/\s?,\s?/', $this->conf['dropdownfields']) as $value) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $groupBy = $value, $orderBy = $value, $limit = '');
@@ -209,6 +210,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
 		$singlerow=$this->cObj->getSubpart($subpart, '###ROW###');
 
+		// ----- check flexform
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', '(hidden=0 and deleted=0) and uid=' . $cid, $groupBy = '', $orderBy = '', $limit = '');
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 			while($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
