@@ -203,7 +203,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 	 */
 
 	protected function getMapsCoordinates($data){
+		
 		$json = t3lib_div::getUrl('https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=de&address=' . urlencode($data));
+		t3lib_utility_Debug::debug($json,__FILE__ . " " . __LINE__);
 		$jsonDecoded = json_decode($json, TRUE);
 		if (!empty($jsonDecoded['results'])) {
 			$lat = $jsonDecoded['results']['0']['geometry']['location']['lat'];
@@ -250,7 +252,10 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			// radius
 			$rc = ($this->conf['radiuscountry']) ? ',' . $this->conf['radiuscountry'] : '';
 			$koord = $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc);
+			
+			t3lib_utility_Debug::debug($koord, __FILE__ . " " . __LINE__);
 
+			$GLOBALS['TYPO3_DB']->store_lastBuiltQuery = 1; #TODO: REMOVE
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'uid,  ' . $tablefields . ', tx_staddressmap_lat, tx_staddressmap_lng,
 				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['0'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['0'] . ')) * cos(RADIANS(' . $koord['1'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
@@ -260,6 +265,8 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				$orderBy = 'EAdvanced',
 				$limit = ''
 			);
+
+			echo $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery; #TODO: REMOVE
 
 			// see radius
 			if($this->conf['circle'] == 1) {
