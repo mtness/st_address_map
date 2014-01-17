@@ -203,6 +203,16 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		return array($lat, $lng);
 	}
 
+	/**
+	 * returns only a-z A-Z 0-9 _ -
+	 *
+	 * @param string $field
+	 * @return string mixed
+	 */
+	protected function cleanFieldName($field) {
+		return preg_replace('/[^a-zA-Z0-9_-]/', '', $field);
+	}
+
 	private function gimmeData($var, $cid, $what, $tablefields) {
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 
@@ -260,7 +270,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'uid,' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
-				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($var, 'tt_address'),
+				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $this->cleanFieldName($what) . ' like ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($var, 'tt_address'),
 				$groupBy = '',
 				$orderBy = '',
 				$limit = ''
