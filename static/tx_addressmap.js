@@ -18,9 +18,9 @@ $(document).ready(function() {
 		function(data){
 			$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
 			show_marker(0);
-		}); 
+		});
 
-		
+
 		$('.tx_staddressmap_select').not(this).each(
 			function(index,element) {
 				element.selectedIndex = 0;
@@ -28,7 +28,7 @@ $(document).ready(function() {
 		);
 
 		$('.tx_staddressmap_input').val('');
-		
+
 	});
 
 	$('.tx_staddressmap_input').keypress(function(e){
@@ -43,9 +43,9 @@ $(document).ready(function() {
 			function(data){
 				$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
 				show_marker(0);
-			}); 
+			});
 
-			
+
 			$('.tx_staddressmap_select').not(this).each(
 				function(index,element) {
 					element.selectedIndex = 0;
@@ -59,28 +59,27 @@ $(document).ready(function() {
 			);
 		}
 	});
-	
+
 	$('.tx_staddressmap_input').focus(function() {
-		$('.tx_staddressmap_input').not(this).val('');	
+		$('.tx_staddressmap_input').not(this).val('');
 		$('.tx_staddressmap_select').each(
 			function(index,element) {
 				element.selectedIndex = 0;
 			}
 		);
 	})
-	
+
 	if($('#tx_staddressmap_seeatstart').val() == 1) {
 		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 			cid: 	$('#tx_staddressmap_cid').val(),
 			t: 		'1',
 			v: 		$('#'+this.id).val(),
-			all:	1,
-			order: $('#tx_staddressmap_order').val(),
+			all:	1
 		},
 		function(data){
 			$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
 			setTimeout(function(){ show_marker(0); },500);
-		}); 
+		});
 	}
 
 	if($('.tx_staddressmap_submit').length > 0) {
@@ -94,7 +93,7 @@ $(document).ready(function() {
 			function(data){
 				$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
 				show_marker(0);
-			}); 
+			});
 
 			$('.tx_staddressmap_select').not(this).each(
 				function(index,element) {

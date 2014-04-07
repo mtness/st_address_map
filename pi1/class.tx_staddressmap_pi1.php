@@ -128,7 +128,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		/* ----- Map ----- */
 		if($this->conf['seeatstart'] == 1) {
-			$maps = '<input id="tx_staddressmap_seeatstart" type="hidden" value="1" /><input id="tx_staddressmap_order" type="hidden" value="' . $this->conf['orderall'] . '" />';
+			$maps = '<input id="tx_staddressmap_seeatstart" type="hidden" value="1" />';
 		}
 
 		$maps .= '<input id="tx_staddressmap_cid" type="hidden" value="' . $content_id . '" /><div id="tx_staddressmap_gmap_' . $content_id . '" class="tx_staddressmap_gmap" style="width: ' . $mapwidth . 'px; height: ' . $mapheight . 'px"></div>';
@@ -151,7 +151,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			var region_centerpoints = new Array();
 			var region_detailzoom = new Array();
 			' . $bubblemarker . '
-			
+
 			function initialize(){
 				var latlng = new google.maps.LatLng(' . $center_coordinates . ');
 				var myMap_' . $content_id . ' = {
@@ -161,7 +161,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				};
 				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_' . $content_id . '"), myMap_' . $content_id . ');
 			}
-			
+
 			</script>';
 
 		$markerArray['###MAPS###'] = $maps;
@@ -279,16 +279,22 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		// see all
 		if(t3lib_div::_GET('all') == 1) {
+			$tableFields = $GLOBALS['TYPO3_DB']->admin_get_fields('tt_address');
+			$orderBy = (in_array($this->conf['orderall'], $tablefields)) ? $this->conf['orderall'] : 'city';
 			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
 				'uid, ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
 				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ')',
 				$groupBy = '',
-				$orderBy = t3lib_div::_GET('order'),
+				$orderBy,
 				$limit = ''
 			);
 			$js_circle = '';
+			t3lib_utility_Debug::debug($this->conf['orderall'], __FILE__ . " " . __LINE__);
+			t3lib_utility_Debug::debug($tableFields, __FILE__ . " " . __LINE__);
+			t3lib_utility_Debug::debug(in_array($this->conf['orderall'], $tablefields), __FILE__ . " " . __LINE__);
+			t3lib_utility_Debug::debug($orderBy, __FILE__ . " " . __LINE__);
 		}
 
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
