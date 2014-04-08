@@ -280,7 +280,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		// see all
 		if(t3lib_div::_GET('all') == 1) {
 			$tableFields = $GLOBALS['TYPO3_DB']->admin_get_fields('tt_address');
-			$orderBy = (array_key_exists($this->conf['orderall'], $tableFields)) ? $this->conf['orderall'] : 'city';
+			$orderBy = (is_array($tableFields[$this->conf['orderall']])) ? $this->conf['orderall'] : 'city';
 			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
 				'uid, ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
@@ -291,7 +291,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				$limit = ''
 			);
 			$js_circle = '';
-			t3lib_utility_Debug::debug($tablefields, __FILE__ . " " . __LINE__);
 		}
 
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
