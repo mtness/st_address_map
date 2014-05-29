@@ -88,7 +88,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		if($errormessage != '') return '<div class="error">' . $errormessage . '</div>';
 
 		// set addresslist
-		$addresslist = explode(',', $addresslist);
+		$addresslist = t3lib_div::intExplode(',', $addresslist);
 		$addresslist = implode(' or pid = ', $addresslist);
 
 		$content_id 		= $this->cObj->data['uid'];
