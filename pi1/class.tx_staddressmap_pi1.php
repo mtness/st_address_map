@@ -231,7 +231,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		foreach ($flexform['data']['sDEF']['lDEF'] as $key => $value) { $$key = reset($value); }
 		$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 		// ----- set addresslist ------
-		$addresslist = explode(',', $addresslist);
+		$addresslist = t3lib_div::intExplode(',', $addresslist);
 		$addresslist = implode(' or pid = ', $addresslist);
 
 		//  ----- radius -----
