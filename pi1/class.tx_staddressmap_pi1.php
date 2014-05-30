@@ -219,7 +219,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
 		$singlerow=$this->cObj->getSubpart($subpart, '###ROW###');
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', '(hidden=0 and deleted=0) and uid=' . $cid, $groupBy = '', $orderBy = '', $limit = '');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', '(hidden=0 and deleted=0) and uid=' . (int)$cid, $groupBy = '', $orderBy = '', $limit = '');
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 			while($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$flexform	= t3lib_div::xml2array($row['pi_flexform']);
