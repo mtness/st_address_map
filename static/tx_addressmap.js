@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 			cid: 	$('#tx_staddressmap_cid').val(),
+			hmac: $('#tx_staddressmap_cidhmac').val(),
 			t: 		tablefield[3],
 			v: 		$('#'+this.id).val()
 		},
@@ -37,6 +38,7 @@ $(document).ready(function() {
 
 			$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 				cid: 	$('#tx_staddressmap_cid').val(),
+				hmac: 	$('#tx_staddressmap_cidhmac').val(),
 				t: 		tablefield[3],
 				v: 		$('#'+this.id).val()
 			},
@@ -72,6 +74,7 @@ $(document).ready(function() {
 	if($('#tx_staddressmap_seeatstart').val() == 1) {
 		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 			cid: 	$('#tx_staddressmap_cid').val(),
+			hash: 	$('#tx_staddressmap_cidhmac').val(),
 			t: 		'1',
 			v: 		$('#'+this.id).val(),
 			all:	1
@@ -87,6 +90,7 @@ $(document).ready(function() {
 			tablefield = $('.tx_staddressmap_input[value!=""]').attr('id').split('_');
 			$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 				cid: 	$('#tx_staddressmap_cid').val(),
+				hmac: 	$('#tx_staddressmap_cidhmac').val(),
 				t: 		tablefield[3],
 				v: 		$('.tx_staddressmap_input[value!=""]').val()
 			},

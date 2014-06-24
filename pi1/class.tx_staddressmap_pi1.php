@@ -42,6 +42,19 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 	var $scriptRelPath = 'pi1/class.tx_staddressmap_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'st_address_map';	// The extension key.
 	var $pi_checkCHash = TRUE;
+	protected $ttAddressFieldArray = array();
+
+	/**
+	 * @param string $field
+	 * @return bool
+	 */
+	protected function isValidDatabaseColumn($field) {
+		if (empty($this->ttAddressFieldArray)) {
+			$this->ttAddressFieldArray = array_keys($GLOBALS['TYPO3_DB']->admin_get_fields('tt_address'));
+		}
+
+		return in_array($field, $this->ttAddressFieldArray);
+	}
 
 	/**
 	 * The main method of the PlugIn
@@ -88,7 +101,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		if($errormessage != '') return '<div class="error">' . $errormessage . '</div>';
 
 		// set addresslist
-		$addresslist = t3lib_div::intExplode(',', $addresslist);
+		$addresslist = t3lib_div::intExplode(',', $addresslist, TRUE);
 		$addresslist = implode(' or pid = ', $addresslist);
 
 		$content_id 		= $this->cObj->data['uid'];
@@ -96,32 +109,45 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'] . ',';
 
 		/* ----- Ajax ----- */
-		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields);
+		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) {
+			$cid = t3lib_div::_GET('cid');
+			$hmac = t3lib_div::_GET('hmac');
+			if ($hmac !== t3lib_div::hmac($cid, 'st_address_map')) {
+				return $this->pi_getLL('nodata');
+			}
+			return $this->gimmeData(t3lib_div::_GET('v'), $cid, t3lib_div::_GET('t'), $tablefields);
+		}
 
 		/* ----- selectfields ----- */
 		foreach (preg_split('/\s?,\s?/', $this->conf['dropdownfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $groupBy = $value, $orderBy = $value, $limit = '');
-			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
-				$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
-				foreach($res as $row) {
-					$option .= '<option value="' . $row[$value] . '">' . $row[$value] . '</option>';
+			$option = '';
+			if ($this->isValidDatabaseColumn($value)) {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $value, $value);
+				if ($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
+					$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
+					foreach ($res as $row) {
+						$option .= '<option value="' . $row[$value] . '">' . $row[$value] . '</option>';
+					}
+					$option .= '</select>';
+				} else {
+					return $this->pi_getLL('nodata');
 				}
-				$option .= '</select>';
-			}  else {
-				return $this->pi_getLL('nodata');
 			}
 			$markerArray['###' . strtoupper($value) . '###'] = $option;
 		}
 
 		/* ----- inputfields ----- */
 		foreach (preg_split('/\s?,\s?/', $this->conf['inputfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value, 'tt_address', 'hidden=0 AND deleted=0', $groupBy = $value, $orderBy = $value, $limit = '');
-			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
-				foreach($res as $row) {
-					$option = '<input class="tx_staddressmap_input" id="tx_staddressmap_input_' . $value . '" value="" />';
+			$option = '';
+			if ($this->isValidDatabaseColumn($value)) {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value, 'tt_address', 'hidden=0 AND deleted=0', $value, $value);
+				if ($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
+					foreach ($res as $row) {
+						$option = '<input class="tx_staddressmap_input" id="tx_staddressmap_input_' . $value . '" value="" />';
+					}
+				} else {
+					return $this->pi_getLL('nodata');
 				}
-			}  else {
-				return $this->pi_getLL('nodata');
 			}
 			$markerArray['###' . strtoupper($value) . '###'] = $option;
 		}
@@ -131,7 +157,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$maps = '<input id="tx_staddressmap_seeatstart" type="hidden" value="1" />';
 		}
 
-		$maps .= '<input id="tx_staddressmap_cid" type="hidden" value="' . $content_id . '" /><div id="tx_staddressmap_gmap_' . $content_id . '" class="tx_staddressmap_gmap" style="width: ' . $mapwidth . 'px; height: ' . $mapheight . 'px"></div>';
+		$maps .= '<input id="tx_staddressmap_cid" type="hidden" value="' . $content_id . '" /><input id="tx_staddressmap_cidhmac" type="hidden" value="' . htmlspecialchars(t3lib_div::hmac($content_id, 'st_address_map')) . '" /><div id="tx_staddressmap_gmap_' . $content_id . '" class="tx_staddressmap_gmap" style="width: ' . $mapwidth . 'px; height: ' . $mapheight . 'px"></div>';
 
 		/* ----- Mapsjavascript ----- */
 
@@ -203,23 +229,20 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		return array($lat, $lng);
 	}
 
-	/**
-	 * returns only a-z A-Z 0-9 _ -
-	 *
-	 * @param string $field
-	 * @return string mixed
-	 */
-	protected function cleanFieldName($field) {
-		return preg_replace('/[^a-zA-Z0-9_-]/', '', $field);
-	}
-
 	private function gimmeData($var, $cid, $what, $tablefields) {
+		$validDatabaseFields = array();
+		foreach (t3lib_div::trimExplode(',', $tablefields, TRUE) as $field) {
+			if ($this->isValidDatabaseColumn($field)) {
+				$validDatabaseFields[] = $field;
+			}
+		}
+
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
 		$singlerow=$this->cObj->getSubpart($subpart, '###ROW###');
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', '(hidden=0 and deleted=0) and uid=' . (int)$cid, $groupBy = '', $orderBy = '', $limit = '');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', '(hidden=0 and deleted=0) and uid=' . (int)$cid);
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 			while($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$flexform	= t3lib_div::xml2array($row['pi_flexform']);
@@ -231,7 +254,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		foreach ($flexform['data']['sDEF']['lDEF'] as $key => $value) { $$key = reset($value); }
 		$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 		// ----- set addresslist ------
-		$addresslist = t3lib_div::intExplode(',', $addresslist);
+		$addresslist = t3lib_div::intExplode(',', $addresslist, TRUE);
 		$addresslist = implode(' or pid = ', $addresslist);
 
 		//  ----- radius -----
@@ -242,13 +265,12 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc))));
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid,  ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng,
-				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['1'] . ')) * cos(RADIANS(' . $koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
+				'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng,
+				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . (float)$koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . (float)$koord['1'] . ')) * cos(RADIANS(' . (float)$koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
 				'tt_address',
-				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . $koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . $koord['1'] . ')) * cos(RADIANS(' . $koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) <= ' . $rad,
-				$groupBy = '',
-				$orderBy = 'EAdvanced',
-				$limit = ''
+				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . (float)$koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . (float)$koord['1'] . ')) * cos(RADIANS(' . (float)$koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) <= ' . (float)$rad,
+				'',
+				'EAdvanced'
 			);
 
 			// see radius
@@ -267,28 +289,25 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				';
 			}
 		} else {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid,' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
-				'tt_address',
-				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $this->cleanFieldName($what) . ' like ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($var, 'tt_address'),
-				$groupBy = '',
-				$orderBy = '',
-				$limit = ''
-			);
+			if ($this->isValidDatabaseColumn($what)) {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng',
+					'tt_address',
+					'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like ' . $GLOBALS['TYPO3_DB']->escapeStrForLike($var, 'tt_address')
+				);
+			}
 		}
 
 		// see all
 		if(t3lib_div::_GET('all') == 1) {
-			$tableFields = $GLOBALS['TYPO3_DB']->admin_get_fields('tt_address');
-			$orderBy = (is_array($tableFields[$this->conf['orderall']])) ? $this->conf['orderall'] : 'city';
+			$orderBy = ($this->isValidDatabaseColumn($this->conf['orderall'])) ? $this->conf['orderall'] : 'city';
 			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
-				'uid, ' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
+				'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
 				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ')',
-				$groupBy = '',
-				$orderBy,
-				$limit = ''
+				'',
+				$orderBy
 			);
 			$js_circle = '';
 		}
