@@ -7,10 +7,10 @@ if (!defined('TYPO3_MODE')) {
 	'Kreativschmiede.' . $_EXTKEY,
 	'Pi1',
 	array(
-		
+		'Adressmap' => 'list',
 	),
 	// non-cacheable actions
 	array(
-		
+		'Adressmap' => '',
 	)
 );
