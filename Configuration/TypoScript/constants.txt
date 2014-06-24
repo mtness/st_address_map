@@ -1,0 +1,15 @@
+
+plugin.tx_staddressmap {
+	view {
+		# cat=plugin.tx_staddressmap/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:st_address_map/Resources/Private/Templates/
+		# cat=plugin.tx_staddressmap/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:st_address_map/Resources/Private/Partials/
+		# cat=plugin.tx_staddressmap/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:st_address_map/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_staddressmap//a; type=string; label=Default storage PID
+		storagePid =
+	}
+}

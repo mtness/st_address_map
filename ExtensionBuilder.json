@@ -1,0 +1,53 @@
+{
+    "modules": [
+
+    ],
+    "properties": {
+        "backendModules": [
+
+        ],
+        "description": "With the extension st_address_map you are able to show addresses out of tt_address in Google Maps. Further it is possible to show the addresses in a list.",
+        "emConf": {
+            "category": "plugin",
+            "custom_category": "",
+            "dependsOn": "typo3 => 6.2\ntt_address => 2.3.4\n",
+            "disableLocalization": false,
+            "disableVersioning": false,
+            "sourceLanguage": "en",
+            "state": "alpha",
+            "targetVersion": "6.2",
+            "version": ""
+        },
+        "extensionKey": "st_address_map",
+        "name": "Address visualization with Google Maps",
+        "originalExtensionKey": "",
+        "persons": [
+            {
+                "company": "Kreativschmiede Eichsfeld",
+                "email": "mail@kreativschmiede-eichsfeld.de",
+                "name": "Thomas Scheibitz",
+                "role": "Developer"
+            }
+        ],
+        "plugins": [
+            {
+                "actions": {
+                    "controllerActionCombinations": "",
+                    "noncacheableActions": "",
+                    "switchableActions": ""
+                },
+                "key": "pi1",
+                "name": "Addressmap"
+            }
+        ],
+        "vendorName": "Kreativschmiede"
+    },
+    "wires": [
+
+    ],
+    "log": {
+        "last_modified": "2014-06-24 03:55",
+        "extension_builder_version": "6.2.0",
+        "be_user": " (1)"
+    }
+}
