@@ -293,7 +293,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng',
 					'tt_address',
-					'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like ' . $GLOBALS['TYPO3_DB']->escapeStrForLike($var, 'tt_address')
+					'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like "' . $GLOBALS['TYPO3_DB']->escapeStrForLike($var, 'tt_address') . '"'
 				);
 			}
 		}
