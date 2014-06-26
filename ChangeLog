@@ -1,3 +1,8 @@
+2014-04-07 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+	- 0.3.6
+
+	* bugfix SQL injection
+
 2013-02-13 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
 	- 0.3.0
 
