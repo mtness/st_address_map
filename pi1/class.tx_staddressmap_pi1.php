@@ -262,13 +262,20 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		if(in_array($what, preg_split('/\s?,\s?/', $this->conf['radiusfields']))) {
 			// radius
 			$rc = ($this->conf['radiuscountry']) ? ',' . $this->conf['radiuscountry'] : '';
-			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc))));
+			$koord = $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc);
+
+			$radiusSearch =
+				'6378.388 * acos('.
+					'sin(RADIANS(tx_staddressmap_lng)) * '.
+					'sin(RADIANS(' . (float)$koord[1] . ')) + '.
+					'cos(RADIANS(tx_staddressmap_lng)) * '.
+					'cos(RADIANS(' . (float)$koord[1] . ')) * '.
+					'cos(RADIANS(' . (float)$koord[0] . ') - RADIANS(tx_staddressmap_lat))'.
+				')';
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng,
-				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . (float)$koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . (float)$koord['1'] . ')) * cos(RADIANS(' . (float)$koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
-				'tt_address',
-				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS(' . (float)$koord['1'] . ')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS(' . (float)$koord['1'] . ')) * cos(RADIANS(' . (float)$koord['0'] . ') -  RADIANS(tx_staddressmap_lng))) <= ' . (float)$rad,
+				'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng, ' . $radiusSearch . ' AS EAdvanced', 'tt_address',
+				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND ' . $radiusSearch . ' <= ' . (float)$rad,
 				'',
 				'EAdvanced'
 			);
