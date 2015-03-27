@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 Thomas Scheibitz <mail@kreativschmiede-eichsfeld.de>
+ *  (c) 2011 Thomas Scheibitz <typo3@scheibitz.com>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,13 +27,11 @@
  * Hint: use extdeveval to insert/update function index above.
  */
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-
 
 /**
  * Plugin 'Gmap with tt_address' for the 'st_address_map' extension.
  *
- * @author	Thomas Scheibitz <<mail@kreativschmiede-eichsfeld.de>
+ * @author	Thomas Scheibitz <typo3@scheibitz.com>
  * @package	TYPO3
  * @subpackage	tx_staddressmap
  */
