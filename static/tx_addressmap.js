@@ -1,61 +1,79 @@
-window.onload = function(){
+var stAddressMap = {
+	location: window.location,
+	getResultofSearch: function(tablefield) {
+		'use strict';
+		var siteid = $('#tx_staddressmap_addresslist_pageid').html();
+		var ajaxtypenumb = $('#tx_staddressmap_addresslist_ajaxtypenumb').html();
+
+
+
+
+	}
+};
+
+window.onload = function() {
+	'use strict';
 	initialize();
-}
+};
 
 $(document).ready(function() {
-
+	'use strict';
 	var siteid = $('#tx_staddressmap_addresslist_pageid').html();
 	var ajaxtypenumb = $('#tx_staddressmap_addresslist_ajaxtypenumb').html();
 
-	$('.tx_staddressmap_select').change(function(){
+	$('.tx_staddressmap_select').change(function() {
+
+
+		stAddressMap.getResultofSearch('test');
+
 		var tablefield = this.id.split('_');
 
-		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
-			cid: 	$('#tx_staddressmap_cid').val(),
+		$.get('index.php?id=' + siteid + '&type=' + ajaxtypenumb + '&ts=' + Date.parse(new Date()) + new Date().getMilliseconds(),{
+			cid: $('#tx_staddressmap_cid').val(),
 			hmac: $('#tx_staddressmap_cidhmac').val(),
-			t: 		tablefield[3],
-			v: 		$('#'+this.id).val()
+			t: tablefield[3],
+			v: $('#' + this.id).val()
 		},
-		function(data){
-			$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
-			show_marker(0);
+		function(data) {
+			$('#tx_staddressmap_addresslist_' + $('#tx_staddressmap_cid').val()).html(data);
+			showMarker(0);
 		});
 
-
 		$('.tx_staddressmap_select').not(this).each(
-			function(index,element) {
+			function(index, element) {
 				element.selectedIndex = 0;
 			}
 		);
 
 		$('.tx_staddressmap_input').val('');
-
 	});
 
-	$('.tx_staddressmap_input').keypress(function(e){
-		if(e.which == 13){
+	$('.tx_staddressmap_input').keypress(function(e) {
+
+		// stAddressMap.getResultofInput(e);
+
+		if (e.which === 13) {
 			var tablefield = this.id.split('_');
 
-			$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
-				cid: 	$('#tx_staddressmap_cid').val(),
-				hmac: 	$('#tx_staddressmap_cidhmac').val(),
-				t: 		tablefield[3],
-				v: 		$('#'+this.id).val()
+			$.get('index.php?id=' + siteid + '&type=' + ajaxtypenumb + '&ts=' + Date.parse(new Date()) + new Date().getMilliseconds(),{
+				cid: $('#tx_staddressmap_cid').val(),
+				hmac: $('#tx_staddressmap_cidhmac').val(),
+				t: tablefield[3],
+				v: $('#' + this.id).val()
 			},
-			function(data){
-				$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
-				show_marker(0);
+			function(data) {
+				$('#tx_staddressmap_addresslist_' + $('#tx_staddressmap_cid').val()).html(data);
+				showMarker(0);
 			});
 
-
 			$('.tx_staddressmap_select').not(this).each(
-				function(index,element) {
+				function(index, element) {
 					element.selectedIndex = 0;
 				}
 			);
 
 			$('.tx_staddressmap_select').each(
-				function(index,element) {
+				function(index, element) {
 					element.selectedIndex = 0;
 				}
 			);
@@ -65,48 +83,50 @@ $(document).ready(function() {
 	$('.tx_staddressmap_input').focus(function() {
 		$('.tx_staddressmap_input').not(this).val('');
 		$('.tx_staddressmap_select').each(
-			function(index,element) {
+			function(index, element) {
 				element.selectedIndex = 0;
 			}
 		);
-	})
+	});
 
-	if($('#tx_staddressmap_seeatstart').val() == 1) {
-		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
-			cid: 	$('#tx_staddressmap_cid').val(),
-			hmac: 	$('#tx_staddressmap_cidhmac').val(),
-			t: 		'1',
-			v: 		$('#'+this.id).val(),
-			all:	1
+	if ($('#tx_staddressmap_seeatstart').val() === 1) {
+		$.get('index.php?id=' + siteid + '&type=' + ajaxtypenumb + '&ts=' + Date.parse(new Date()) + new Date().getMilliseconds(),{
+			cid: $('#tx_staddressmap_cid').val(),
+			hmac: $('#tx_staddressmap_cidhmac').val(),
+			t: '1',
+			v: $('#' + this.id).val(),
+			all: 1
 		},
-		function(data){
-			$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
-			setTimeout(function(){ show_marker(0); },500);
+		function(data) {
+			$('#tx_staddressmap_addresslist_' + $('#tx_staddressmap_cid').val()).html(data);
+			setTimeout(function() {
+				showMarker(0);
+			}, 500);
 		});
 	}
 
-	if($('.tx_staddressmap_submit').length > 0) {
+	if ($('.tx_staddressmap_submit').length > 0) {
 		$('.tx_staddressmap_submit').click(function() {
-			tablefield = $('.tx_staddressmap_input[value!=""]').attr('id').split('_');
-			$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
-				cid: 	$('#tx_staddressmap_cid').val(),
-				hmac: 	$('#tx_staddressmap_cidhmac').val(),
-				t: 		tablefield[3],
-				v: 		$('.tx_staddressmap_input[value!=""]').val()
+			var tablefield = $('.tx_staddressmap_input[value!=""]').attr('id').split('_');
+			$.get('index.php?id=' + siteid + '&type=' + ajaxtypenumb + '&ts=' + Date.parse(new Date()) + new Date().getMilliseconds(),{
+				cid: $('#tx_staddressmap_cid').val(),
+				hmac: $('#tx_staddressmap_cidhmac').val(),
+				t: tablefield[3],
+				v: $('.tx_staddressmap_input[value!=""]').val()
 			},
-			function(data){
-				$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
-				show_marker(0);
+			function(data) {
+				$('#tx_staddressmap_addresslist_' + $('#tx_staddressmap_cid').val()).html(data);
+				showMarker(0);
 			});
 
 			$('.tx_staddressmap_select').not(this).each(
-				function(index,element) {
+				function(index, element) {
 					element.selectedIndex = 0;
 				}
 			);
 
 			$('.tx_staddressmap_select').each(
-				function(index,element) {
+				function(index, element) {
 					element.selectedIndex = 0;
 				}
 			);
@@ -114,39 +134,39 @@ $(document).ready(function() {
 	}
 });
 
-
-function is_array(value) {
+function isArray(value) {
+	'use strict';
 	if (typeof value === 'object' && value && value instanceof Array) {
 		return true;
 	}
 	return false;
 }
 
-function str_replace(s, r, c) {
-	if (is_array(s)) {
-		for(i=0; i < s.length; i++) {
+function strReplace(s, r, c) {
+	'use strict';
+	if (isArray(s)) {
+		for (var i = 0; i < s.length; i++) {
 			c = c.split(s[i]).join(r[i]);
 		}
-	}
-	else {
+	} else {
 		c = c.split(s).join(r);
 	}
 	return c;
 }
 
 var infowindow;
-(function(){
+(function() {
 	google.maps.Map.prototype.markers = new Array();
 
-	google.maps.Map.prototype.addMarker = function(marker){
+	google.maps.Map.prototype.addMarker = function(marker) {
 		this.markers[this.markers.length] = marker;
 	};
 
-	google.maps.Map.prototype.getMarkers = function(){
-		return this.markers
+	google.maps.Map.prototype.getMarkers = function() {
+		return this.markers;
 	};
 
-	google.maps.Map.prototype.clearMarkers = function(){
+	google.maps.Map.prototype.clearMarkers = function() {
 		if (infowindow) {
 			infowindow.close();
 		}
@@ -157,8 +177,9 @@ var infowindow;
 	};
 })();
 
-function createMarker(name, latlng){
-	name = str_replace(new Array("|-|","-|-","tx_addressmap_replace"), new Array("'",'"','<a'), name);
+function createMarker(name, latlng) {
+	'use strict';
+	name = strReplace(new Array("|-|","-|-","tx_addressmap_replace"), new Array("'",'"','<a'), name);
 	var marker = new google.maps.Marker({
 		position: latlng,
 		map: map,
@@ -175,7 +196,7 @@ function createMarker(name, latlng){
 	return marker;
 }
 
-function show_marker(id){
+function showMarker(id){
 	if(id=='-1') {
 		return;
 	}
