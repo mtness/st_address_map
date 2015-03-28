@@ -3,9 +3,7 @@ plugin.tx_staddressmap_pi1 {
 		# cat=Addressmap - Bubblelayout//0010; type=wrap; label= allWrap
 		wrap = <table class="bubble">|</table>
 		# cat=Addressmap - Bubblelayout//0020; type=wrap; label= nameWrap
-		name = <tr><th>|
-		# cat=Addressmap - Bubblelayout//0030; type=wrap; label= lastnameWrap
-		last_name = |</th></tr>
+		name = <tr><th>|</th></tr>
 		# cat=Addressmap - Bubblelayout//0040; type=wrap; label= addressWrap
 		address = <tr><td>|</td></tr>
 		# cat=Addressmap - Bubblelayout//0050; type=wrap; label= zipWrap
@@ -54,7 +52,7 @@ plugin.tx_staddressmap_pi1 {
 	# cat=Addressmap - Settings//0010; type=string; label= templateFile
 	templateFile = EXT:st_address_map/static/template.html
 	# cat=Addressmap - Settings//0020; type=string; label= tablefields: You can add various other tt_address table fields to use them as markers in the templateFile (###YOURFIELD###).
-	tablefields =  first_name, last_name, phone, address, zip, city, region, country, description
+	tablefields =  name, first_name, last_name, phone, address, zip, city, region, country, description
 	# cat=Addressmap - Settings//0030; type=string; label= bubblefields: Add the tt_address table fields, which shall be shown in the bubble.
 	bubblefields =  name, address, zip, city, phone
 	# cat=Addressmap - Settings//0040; type=string; label= dropdownfields
@@ -83,8 +81,6 @@ plugin.tx_staddressmap_pi1 {
 	seeatstart = 1
 	# cat=Addressmap - Settings//0160; type=string; label= order all
 	orderall = city
-	# cat=Addressmap - Settings//0170; type=boolean; label= fancyselect
-	fancyselect = 0
 	# cat=Addressmap - Settings//0180; type=boolean; label= searchbutton
 	searchbutton = 1
 	# cat=Addressmap - Settings//0190; type=file[png,jpg,gif]; label= bubblemarker: You can add your own marker image.

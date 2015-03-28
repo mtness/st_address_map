@@ -36,9 +36,9 @@
  * @subpackage	tx_staddressmap
  */
 class tx_staddressmap_pi1 extends tslib_pibase {
-	var $prefixId = 'tx_staddressmap_pi1';		// Same as class name
-	var $scriptRelPath = 'pi1/class.tx_staddressmap_pi1.php';	// Path to this script relative to the extension dir.
-	var $extKey = 'st_address_map';	// The extension key.
+	var $prefixId = 'tx_staddressmap_pi1'; // Same as class name
+	var $scriptRelPath = 'pi1/class.tx_staddressmap_pi1.php'; // Path to this script relative to the extension dir.
+	var $extKey = 'st_address_map'; // The extension key.
 	var $pi_checkCHash = TRUE;
 	protected $ttAddressFieldArray = array();
 
@@ -61,24 +61,12 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 	 * @param	array		$conf: The PlugIn configuration
 	 * @return	The content that is displayed on the website
 	 */
-	function main($content, $conf) {
+	function main($conf) {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		$this->pi_initPIflexForm();
 		$errormessage = '';
-
-		if($this->conf['fancyselect'] == 1) {
-			$GLOBALS['TSFE']->additionalFooterData[$extKey . '_85'] = '<script type="text/javascript" src="' . t3lib_extMgm::siteRelPath($this->extKey) . 'static/selectbox/jquery.selectbox-0.1.3.min.js"></script>
-			<script type="text/javascript">
-				$(function () {
-    				$(".tx_staddressmap_select").selectbox(
-						"change",0
-					);
-				});
-			</script>';
-			$GLOBALS['TSFE']->additionalHeaderData[$this->extKey . '_86'] = '<link href="' .t3lib_extMgm::siteRelPath($this->extKey) . 'static/selectbox/jquery.selectbox.css" rel="stylesheet" type="text/css" />';
-		}
 
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 		$templatefile = ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) ? ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) : ('EXT:st_address_map/static/template.html');
@@ -122,7 +110,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			if ($this->isValidDatabaseColumn($value)) {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,' . $value, 'tt_address', '(pid = ' . $addresslist . ') AND (hidden=0 AND deleted=0)', $value, $value);
 				if ($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
-					$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
+					$option = '<select class="tx_staddressmap_select" data-fieldname="' . $value . '"><option value="-1">' . $this->pi_getLL('please_select') . '</option>';
 					foreach ($res as $row) {
 						$option .= '<option value="' . $row[$value] . '">' . $row[$value] . '</option>';
 					}
@@ -141,7 +129,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value, 'tt_address', 'hidden=0 AND deleted=0', $value, $value);
 				if ($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 					foreach ($res as $row) {
-						$option = '<input class="tx_staddressmap_input" id="tx_staddressmap_input_' . $value . '" value="" />';
+						$option = '<input class="tx_staddressmap_input" data-fieldname="' . $value . '" value="" />';
 					}
 				} else {
 					return $this->pi_getLL('nodata');
@@ -150,12 +138,21 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$markerArray['###' . strtoupper($value) . '###'] = $option;
 		}
 
-		/* ----- Map ----- */
+		/**
+		 * generate data attributes
+		 */
+		$dataAttributes = '';
 		if($this->conf['seeatstart'] == 1) {
-			$maps = '<input id="tx_staddressmap_seeatstart" type="hidden" value="1" />';
+			$dataAttributes .= ' data-staddressmap-seeatstart="1"';
 		}
+		$dataAttributes .= ' data-staddressmap-pageid="' . $GLOBALS['TSFE']->id . '"';
+		$dataAttributes .= ' data-staddressmap-ajaxtypenumb="' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'] . '"';
+		$dataAttributes .= ' data-staddressmap-cid="' . $content_id . '"';
+		$dataAttributes .= ' data-staddressmap-cidhmac="' . htmlspecialchars(t3lib_div::hmac($content_id, 'st_address_map')) . '"';
 
-		$maps .= '<input id="tx_staddressmap_cid" type="hidden" value="' . $content_id . '" /><input id="tx_staddressmap_cidhmac" type="hidden" value="' . htmlspecialchars(t3lib_div::hmac($content_id, 'st_address_map')) . '" /><div id="tx_staddressmap_gmap_' . $content_id . '" class="tx_staddressmap_gmap" style="width: ' . $mapwidth . 'px; height: ' . $mapheight . 'px"></div>';
+
+		/* ----- Map ----- */
+		$maps = '<div id="tx_staddressmap_gmap_' . $content_id . '" class="tx_staddressmap_gmap" ' . $dataAttributes . ' style="width: ' . $mapwidth . 'px; height: ' . $mapheight . 'px"></div>';
 
 		/* ----- Mapsjavascript ----- */
 
@@ -198,7 +195,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray) . '<div style="display:none" id="tx_staddressmap_addresslist_pageid">' . $GLOBALS['TSFE']->id . '</div><div style="display:none" id="tx_staddressmap_addresslist_ajaxtypenumb">' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'] . '</div>';
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray);
 		return $this->pi_wrapInBaseClass($content);
 	}
 
@@ -304,7 +301,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 		// see all
-		if(t3lib_div::_GET('all') == 1) {
+		if(t3lib_div::_GET('all') == 1 || t3lib_div::_GET('v') === '-1') {
 			$orderBy = ($this->isValidDatabaseColumn($this->conf['orderall'])) ? $this->conf['orderall'] : 'city';
 			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
@@ -404,7 +401,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/st_address_map/pi1/class.tx_staddressmap_pi1.php'])	{
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/st_address_map/pi1/class.tx_staddressmap_pi1.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/st_address_map/pi1/class.tx_staddressmap_pi1.php']);
 }
 

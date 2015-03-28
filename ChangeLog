@@ -1,14 +1,23 @@
-2014-06-26 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2014-06-28 Thomas Scheibitz  <typo3@scheibitz.com>
+	- 0.4.0
+
+	* bugfix for TYPO3 Version 6.2.x
+	* update jQuery Version
+	* fix javascript bugs
+	* remove fancy selectbox
+	* code cleanup
+
+2014-06-26 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.3.7
 
 	* bugfix Radiussearch
 
-2014-06-26 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2014-06-26 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.3.6
 
 	* bugfix SQL injection
 
-2013-02-13 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2013-02-13 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.3.0
 
 	* removed error - No thumbnails in the backend http://forge.typo3.org/issues/45465
@@ -16,20 +25,20 @@
 	* set depends now on TYPO3 and tt_address
 	* bugfixed mysql query
 
-2012-11-15 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2012-11-15 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.2.2
 
 	* set the js in typoscript
 	* added htmlentities
 
 
-2012-08-10 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2012-08-10 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.2.1
 
 	* fixed page typenum error
 
 
-2012-08-09 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2012-08-09 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.2.0
 
 	* added curl support
@@ -43,6 +52,6 @@
 	* bugfix - Error in the indication of multiple sources fixed. In the old version the use of multiple sources wasn't possible.
 
 
-2011-01-25 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+2011-01-25 Thomas Scheibitz  <typo3@scheibitz.com>
 
 	* initial code generated with kickstarter
