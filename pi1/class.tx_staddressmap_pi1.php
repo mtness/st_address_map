@@ -145,10 +145,15 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		if($this->conf['seeatstart'] == 1) {
 			$dataAttributes .= ' data-staddressmap-seeatstart="1"';
 		}
+		if($this->conf['bubblemarker']) {
+			$dataAttributes .= ' data-bubblemarker="' . $this->conf['bubblemarker'] . '"';
+		}
 		$dataAttributes .= ' data-staddressmap-pageid="' . $GLOBALS['TSFE']->id . '"';
 		$dataAttributes .= ' data-staddressmap-ajaxtypenumb="' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'] . '"';
 		$dataAttributes .= ' data-staddressmap-cid="' . $content_id . '"';
 		$dataAttributes .= ' data-staddressmap-cidhmac="' . htmlspecialchars(t3lib_div::hmac($content_id, 'st_address_map')) . '"';
+		$dataAttributes .= ' data-staddressmap-startzoom="' . $start_zoom . '"';
+		$dataAttributes .= ' data-staddressmap-centercoordinates="' . $center_coordinates . '"';
 
 
 		/* ----- Map ----- */
@@ -157,33 +162,39 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		/* ----- Mapsjavascript ----- */
 
 		$bubblemarker = ($this->conf['bubblemarker']) ? 'var icon = "' . $this->conf['bubblemarker'] . '";' : 'var icon = "";';
-		$GLOBALS['TSFE']->additionalFooterData[$this->extKey . '_665_' . $content_id] = '
-			<script type="text/javascript">
-			var map;
-			var circle = null;
-			var circledata = null;
-			var marker = new Array();
-			var centerpoints = new Array();
-			var detailzoom = new Array();
-			var city_marker = new Array();
-			var city_centerpoints = new Array();
-			var city_detailzoom = new Array();
-			var region_marker = new Array();
-			var region_centerpoints = new Array();
-			var region_detailzoom = new Array();
-			' . $bubblemarker . '
+		
+//		\TYPO3\CMS\Core\Utility\DebugUtility::debug($bubblemarker, __FILE__ . " " . __LINE__);
+//		\TYPO3\CMS\Core\Utility\DebugUtility::debug($center_coordinates, __FILE__ . " " . __LINE__);
+//		\TYPO3\CMS\Core\Utility\DebugUtility::debug($content_id, __FILE__ . " " . __LINE__);
+//		\TYPO3\CMS\Core\Utility\DebugUtility::debug($start_zoom, __FILE__ . " " . __LINE__);
 
-			function initialize(){
-				var latlng = new google.maps.LatLng(' . $center_coordinates . ');
-				var myMap_' . $content_id . ' = {
-					zoom: ' . $start_zoom . ',
-					center: latlng,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				};
-				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_' . $content_id . '"), myMap_' . $content_id . ');
-			}
-
-			</script>';
+//		$GLOBALS['TSFE']->additionalFooterData[$this->extKey . '_665_' . $content_id] = '
+//			<script type="text/javascript">
+//			var map;
+//			var circle = null;
+//			var circledata = null;
+//			var marker = new Array();
+//			var centerpoints = new Array();
+//			var detailzoom = new Array();
+//			var city_marker = new Array();
+//			var city_centerpoints = new Array();
+//			var city_detailzoom = new Array();
+//			var region_marker = new Array();
+//			var region_centerpoints = new Array();
+//			var region_detailzoom = new Array();
+//			' . $bubblemarker . '
+//
+//			function initialize(){
+//				var latlng = new google.maps.LatLng(' . $center_coordinates . ');
+//				var myMap_' . $content_id . ' = {
+//					zoom: ' . $start_zoom . ',
+//					center: latlng,
+//					mapTypeId: google.maps.MapTypeId.ROADMAP
+//				};
+//				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_' . $content_id . '"), myMap_' . $content_id . ');
+//			}
+//
+//			</script>';
 
 		$markerArray['###MAPS###'] = $maps;
 		$markerArray['###ADDRESSLIST###'] = '<div id="tx_staddressmap_addresslist_' . $content_id . '" class="tx_staddressmap_addresslist"></div>';
@@ -269,7 +280,8 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				')';
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng, ' . $radiusSearch . ' AS EAdvanced', 'tt_address',
+				'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng, ' . $radiusSearch . ' AS EAdvanced',
+				'tt_address',
 				'(hidden=0 AND deleted=0) AND (pid = ' . $addresslist . ') AND ' . $radiusSearch . ' <= ' . (float)$rad,
 				'',
 				'EAdvanced'
@@ -315,11 +327,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
-			$ji = 0;
+			$javascriptContent = '';
 			$common_lat = array();
 			$common_lng = array();
-			$js_output = '<script type="text/javascript">' . "\n";
-			$js_output .= 'var a = new Array();' . "\n";
 
 			foreach($res as $row) {
 				if($row['tx_staddressmap_lat'] == 0 || $row['tx_staddressmap_lng'] == 0) {
@@ -334,8 +344,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 					);
 				}
 
-				// begin js
-				$js_output .= 'a[' . $ji . '] = new Object();' . "\n";
 				// begin bubbletext
 				$bubbletext = '';
 				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields']) as $tvalue) {
@@ -360,41 +368,33 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				}
 
 				$bubbletext = t3lib_TStemplate::wrap($bubbletext, $this->conf['bubblelayout.']['wrap']);
-				$js_output .= 'a[' . $ji . '].name = \'' . $bubbletext . '\'' . "\n";
-				$js_output .= 'a[' . $ji . '].lat = ' . $row['tx_staddressmap_lat'] . ';' . "\n";
-				$js_output .= 'a[' . $ji . '].lng = ' . $row['tx_staddressmap_lng'] . ';' . "\n";
+				$javascriptContent .= '<section data-staddressmap-bubblecontent="1" data-staddressmap-bubblelat="' . $row['tx_staddressmap_lat'] . '" data-staddressmap-bubblelng="' . $row['tx_staddressmap_lng'] . '" data-staddressmap-parentmap="' . $cid . '">' . $bubbletext . '</section>';
 
 				// ----- Calculate average coordinates
 				$common_lat[] = $row['tx_staddressmap_lat'];
 				$common_lng[] = $row['tx_staddressmap_lng'];
-				$ji++;
 
 				$markerArray['###DISTANCE###'] = ($this->conf['radiusfields'] != '' && round($row['EAdvanced'], 1) > 0) ? t3lib_TStemplate::wrap(round($row['EAdvanced'], 1) . ' km', $this->conf['listlayout.']['distance']) : '';
 
 				$adresslistrow .= $this->cObj->substituteMarkerArrayCached($singlerow, $markerArray);
 			}
-			$js_output .= 'marker[0] = a;' . "\n";
-			$js_output .= 'centerpoints[0] = new Object();' . "\n";
+
+//			$js_output .= 'marker[0] = a;' . "\n";
+//			$js_output .= 'centerpoints[0] = new Object();' . "\n";
 
 			if(in_array($what, preg_split('/\s?,\s?/', $this->conf['radiusfields']))) {
-				$js_output .= 'centerpoints[0].lat = ' . $koord['1'] . ';' . "\n";
-				$js_output .= 'centerpoints[0].lng = ' . $koord['0'] . ';' . "\n";
+				$javascriptContent .= '<section data-staddressmap-mapdata="1" data-staddressmap-detailzoom="' . $detail_zoom . '" data-staddressmap-centerpoint-lat="' . $koord['1'] . '" data-staddressmap-centerpoint-lng="' . $koord['0'] . '" data-staddressmap-parentmap="' . $cid . '"></section>';
 			} else {
-				$js_output .= 'centerpoints[0].lat = ' . ((max($common_lat)+min($common_lat))/2) . ';' . "\n";
-				$js_output .= 'centerpoints[0].lng = ' . ((max($common_lng)+min($common_lng))/2) . ';' . "\n";
+				$javascriptContent .= '<section data-staddressmap-mapdata="1" data-staddressmap-detailzoom="' . $detail_zoom . '" data-staddressmap-centerpoint-lat="' . ((max($common_lat)+min($common_lat))/2) . '" data-staddressmap-centerpoint-lng="' . ((max($common_lng)+min($common_lng))/2) . '" data-staddressmap-parentmap="' . $cid . '"></section>';
 			}
-
-			$js_output .= 'detailzoom[0] = new Object();' . "\n";
-			$js_output .= 'detailzoom[0] = ' . $detail_zoom . ';' . "\n";
-			$js_output .= $js_circle;
-			$js_output .= '</script>';
+//			$js_output .= $js_circle;
 
 		}  else {
 			return $this->pi_getLL('nodata') . '<script type="text/javascript">marker = new Array();</script>';
 		}
 
-		$subpartArray['###ROW###'] = $adresslistrow;
-		$markerArray['###JSOUTPUT###'] = $js_output;
+		$subpartArray['###ROW###'] = '<div id="tx_staddressmap_addresslist">' . $adresslistrow . '</div>';
+		$markerArray['###JSOUTPUT###'] = '<div id="tx_staddressmap_javascript" style="display: none">' . $javascriptContent . '</div>';
 
 		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, $subpartArray, array());
 		return $this->pi_wrapInBaseClass($content);
