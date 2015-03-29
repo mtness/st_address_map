@@ -4,6 +4,7 @@
 	#	external = 1
 	#	disableCompression = 1
 	#	excludeFromConcatenation = 1
+	#}
 #}
 
 [userFunc = user_st_addressmapOnCurrentPage]

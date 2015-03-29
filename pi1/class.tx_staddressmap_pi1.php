@@ -72,7 +72,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$templatefile = ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) ? ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) : ('EXT:st_address_map/static/template.html');
 		$this->templateHtml = $this->cObj->fileResource($templatefile);
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###TEMPLATE###');
-
+		
 		// errorhandling
 		$mapsettings = $this->cObj->data['pi_flexform']['data']['sDEF']['lDEF'];
 		if (is_array($mapsettings)) {
@@ -301,7 +301,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 		// see all
-		if(t3lib_div::_GET('all') == 1 || t3lib_div::_GET('v') === '-1') {
+		if(t3lib_div::_GET('all') == 1 || t3lib_div::_GET('v') === '-1' || t3lib_div::_GET('v') === '') {
 			$orderBy = ($this->isValidDatabaseColumn($this->conf['orderall'])) ? $this->conf['orderall'] : 'city';
 			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000';
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
@@ -341,7 +341,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields']) as $tvalue) {
 					if($row[$tvalue]) {
 						$bubblewrap = $this->conf['bubblelayout.'][$tvalue] ? $this->conf['bubblelayout.'][$tvalue] : '|';
-						if($tvalue == 'email') {
+						if($tvalue === 'email') {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a', "'", '"'), array("tx_addressmap_replace", "|-|", "-|-"), $this->cObj->mailto_makelinks('mailto:' . $row[$tvalue], '')), $bubblewrap);
 						} else {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue], ENT_COMPAT, 'UTF-8', 0)), $bubblewrap);

@@ -1,6 +1,8 @@
 2014-06-28 Thomas Scheibitz  <typo3@scheibitz.com>
 	- 0.4.0
 
+	* display all addresses if no value in selectbox selected
+	* bugfix jQuery example in setup.txt
 	* bugfix for TYPO3 Version 6.2.x
 	* update jQuery Version
 	* fix javascript bugs
