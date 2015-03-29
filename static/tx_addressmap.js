@@ -1,3 +1,4 @@
+var infowindow;
 function createMarker(name, latlng) {
 	'use strict';
 	name = stAddressMap.replaceContentsInArray(new Array('|-|', '-|-', 'tx_addressmap_replace'), new Array("'", '"', '<a'), name);
@@ -6,6 +7,7 @@ function createMarker(name, latlng) {
 		map: map,
 		icon: icon
 	});
+
 	google.maps.event.addListener(marker, 'click', function() {
 		if (infowindow) {
 			infowindow.close();
@@ -15,6 +17,11 @@ function createMarker(name, latlng) {
 		});
 		infowindow.open(map, marker);
 	});
+
+	google.maps.event.addListener(map, 'click', function() {
+		infowindow.close();
+	});
+
 	return marker;
 }
 
@@ -162,7 +169,6 @@ $(document).ready(function() {
 	}
 });
 
-var infowindow;
 (function() {
 	google.maps.Map.prototype.markers = new Array();
 
