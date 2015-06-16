@@ -292,7 +292,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			}
 		} else {
 			if ($this->isValidDatabaseColumn($what)) {
-				var_dump($this->conf);
 				if ($this->conf['searchPlaceholderBefore.'][$what]) {
 					if($this->conf['searchPlaceholderBefore.'][$what] == 1) {$placeholderBefore = '%';}
 				} else {
