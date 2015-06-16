@@ -292,8 +292,17 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			}
 		} else {
 			if ($this->isValidDatabaseColumn($what)) {
-				if ($this->conf['searchPlaceholderBefore'] && $this->conf['searchPlaceholderBefore'] == 1) {$placeholderBefore = '%';}
-				if ($this->conf['searchPlaceholderAfter'] && $this->conf['searchPlaceholderAfter'] == 1) {$placeholderAfter = '%';}
+				var_dump($this->conf);
+				if ($this->conf['searchPlaceholderBefore.'][$what]) {
+					if($this->conf['searchPlaceholderBefore.'][$what] == 1) {$placeholderBefore = '%';}
+				} else {
+					if ($this->conf['searchPlaceholderBefore'] && $this->conf['searchPlaceholderBefore'] == 1) {$placeholderBefore = '%';}
+				}
+				if ($this->conf['searchPlaceholderAfter.'][$what]) {
+					if($this->conf['searchPlaceholderAfter.'][$what] == 1) {$placeholderAfter = '%';}
+				} else {
+					if ($this->conf['searchPlaceholderAfter'] && $this->conf['searchPlaceholderAfter'] == 1) {$placeholderAfter = '%';}
+				}
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng',
 					'tt_address',
