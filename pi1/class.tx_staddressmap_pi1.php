@@ -72,7 +72,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$templatefile = ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) ? ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) : ('EXT:st_address_map/static/template.html');
 		$this->templateHtml = $this->cObj->fileResource($templatefile);
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###TEMPLATE###');
-		
+
 		// errorhandling
 		$mapsettings = $this->cObj->data['pi_flexform']['data']['sDEF']['lDEF'];
 		if (is_array($mapsettings)) {
@@ -292,10 +292,20 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			}
 		} else {
 			if ($this->isValidDatabaseColumn($what)) {
+				if ($this->conf['searchPlaceholderBefore.'][$what]) {
+					if($this->conf['searchPlaceholderBefore.'][$what] == 1) {$placeholderBefore = '%';}
+				} else {
+					if ($this->conf['searchPlaceholderBefore'] && $this->conf['searchPlaceholderBefore'] == 1) {$placeholderBefore = '%';}
+				}
+				if ($this->conf['searchPlaceholderAfter.'][$what]) {
+					if($this->conf['searchPlaceholderAfter.'][$what] == 1) {$placeholderAfter = '%';}
+				} else {
+					if ($this->conf['searchPlaceholderAfter'] && $this->conf['searchPlaceholderAfter'] == 1) {$placeholderAfter = '%';}
+				}
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'uid, ' . (!empty($validDatabaseFields) ? implode(', ', $validDatabaseFields) . ', ' : '') . 'tx_staddressmap_lat, tx_staddressmap_lng',
 					'tt_address',
-					'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like "' . $GLOBALS['TYPO3_DB']->escapeStrForLike($var, 'tt_address') . '"'
+					'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like "' . $placeholderBefore . $GLOBALS['TYPO3_DB']->escapeStrForLike($var, 'tt_address') . $placeholderAfter . '"'
 				);
 			}
 		}

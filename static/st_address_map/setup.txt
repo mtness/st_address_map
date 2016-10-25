@@ -66,6 +66,8 @@ plugin.tx_staddressmap_pi1 {
 	bubblefields =  {$plugin.tx_staddressmap_pi1.bubblefields}
 	dropdownfields = {$plugin.tx_staddressmap_pi1.dropdownfields}
 	inputfields = {$plugin.tx_staddressmap_pi1.inputfields}
+	searchPlaceholderBefore = {$plugin.tx_staddressmap_pi1.searchPlaceholderBefore}
+	searchPlaceholderAfter = {$plugin.tx_staddressmap_pi1.searchPlaceholderAfter}
 	radiusfields = {$plugin.tx_staddressmap_pi1.radiusfields}
 	searchradius = {$plugin.tx_staddressmap_pi1.searchradius}
 	radiuscountry = {$plugin.tx_staddressmap_pi1.radiuscountry}
