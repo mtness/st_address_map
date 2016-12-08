@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-12-08T22:57:04+00:00" product-name="mask_example">
+    <header/>
+    <body>
+      <trans-unit id="wizards.newContentElement.st_addressmap_title" xml:space="preserve">
+        <source>Address visualization with Google Maps</source>
+      </trans-unit>
+      <trans-unit id="wizards.newContentElement.st_addressmap_description" xml:space="preserve">
+        <source>With the element you are able to show addresses out of tt_address in Google Maps.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

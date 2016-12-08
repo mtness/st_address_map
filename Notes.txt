@@ -11,3 +11,5 @@
         		'start_zoom'			=> 'Start zoom',
         		'detail_zoom'			=> 'Detail zoom',
         		'center_coordinates'	=> 'Start coordinates'
+
+        		st_addressmap_startzoom

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-12-08T22:57:04+00:00" product-name="mask_example">
+    <header/>
+    <body>
+      <trans-unit id="tt_content.tx_maskexample_st_addressmap_addresslist" xml:space="preserve">
+        <source>Addresslist</source>
+      </trans-unit>
+      <trans-unit id="tt_content.tx_maskexample_st_addressmap_centercoordinates" xml:space="preserve">
+        <source>Start coordinates</source>
+      </trans-unit>
+      <trans-unit id="tt_content.tx_maskexample_st_addressmap_detailzoom" xml:space="preserve">
+        <source>Detail zoom</source>
+      </trans-unit>
+      <trans-unit id="tt_content.tx_maskexample_st_addressmap_mapheight" xml:space="preserve">
+        <source>Map height</source>
+      </trans-unit>
+      <trans-unit id="tt_content.tx_maskexample_st_addressmap_mapwidth" xml:space="preserve">
+        <source>Map width</source>
+      </trans-unit>
+      <trans-unit id="tt_content.tx_maskexample_st_addressmap_startzoom" xml:space="preserve">
+        <source>Start zoom</source>
+      </trans-unit>
+      <trans-unit id="tt_content.CType.div._maskexample_" xml:space="preserve">
+        <source>_maskexample_</source>
+      </trans-unit>
+      <trans-unit id="tt_content.CType.maskexample_st_addressmap" xml:space="preserve">
+        <source>Address visualization with Google Maps</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
