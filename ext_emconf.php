@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'With the extension st_address_map you are able to show addresses out of tt_address in Google Maps. Further it is possible to show the addresses in a list.',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '0.3.7',
+	'version' => '0.4.0',
 	'dependencies' => 'tt_address',
 	'conflicts' => '',
 	'priority' => '',
@@ -28,14 +28,14 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearcacheonload' => 0,
 	'lockType' => '',
 	'author' => 'Thomas Scheibitz',
-	'author_email' => 'mail@kreativschmiede-eichsfeld.de',
-	'author_company' => 'Kreativschmiede Eichsfeld',
+	'author_email' => 'typo3@scheibitz.com',
+	'author_company' => 'scheibitz.com',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
-			'typo3' => '4.5.0-6.1.99',
-			'tt_address' => '2.2.0-2.3.3',
+			'typo3' => '4.5.0-6.2.99',
+			'tt_address' => '2.3.0-2.3.5',
 		),
 		'conflicts' => array(
 		),
