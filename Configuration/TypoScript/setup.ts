@@ -15,6 +15,13 @@ tt_content.staddressmap_st_addressmap {
         }
         as = data_tx_staddressmap_st_addressmap_addresselement
     }
+
+    settings {
+        tx_staddressmap {
+            googleApiKey = TEXT
+            googleApiKey.value = {$plugin.tx_staddressmap.settings.googleApiKey}
+        }
+    }
 }
 
 plugin.tx_ttaddress_pi1 {

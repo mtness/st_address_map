@@ -6,17 +6,8 @@
       <trans-unit id="tt_content.tx_staddressmap_st_addressmap_addresselement" xml:space="preserve">
         <source>Addresslist Element</source>
       </trans-unit>
-      <trans-unit id="tt_content.tx_staddressmap_st_addressmap_centercoordinates" xml:space="preserve">
-        <source>Start coordinates</source>
-      </trans-unit>
-      <trans-unit id="tt_content.tx_staddressmap_st_addressmap_detailzoom" xml:space="preserve">
-        <source>Detail zoom</source>
-      </trans-unit>
       <trans-unit id="tt_content.tx_staddressmap_st_addressmap_mapheight" xml:space="preserve">
         <source>Map height</source>
-      </trans-unit>
-      <trans-unit id="tt_content.tx_staddressmap_st_addressmap_startzoom" xml:space="preserve">
-        <source>Start zoom</source>
       </trans-unit>
       <trans-unit id="tt_content.CType.div._staddressmap_" xml:space="preserve">
         <source>_staddressmap_</source>

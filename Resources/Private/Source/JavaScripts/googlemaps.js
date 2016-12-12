@@ -1,6 +1,6 @@
 define([
 	'googlemaps',
-	'async!https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=places,geometry'
+	'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBxSk_ZAKOJlPzMRSpnTXVuTnftFTwpfTA&callback=initMap&libraries=places,geometry'
 	], function() {
 	'use strict';
 
@@ -204,41 +204,6 @@ define([
 						alert('Geocode was not successful for the following reason: ' + status);
 					}
 				});
-
-
-
-				// geocoder.geocode({address: address}, function(results, status) {
-				// 	console.log(results[0].geometry);
-				// 	console.log(google.maps.GeocoderStatus.OK);
-				// 	if (status == google.maps.GeocoderStatus.OK) {
-				// 		staddressmap.GoogleMaps.map.setCenter(results[0].geometry.location);
-				//
-				// 		if (staddressmap.GoogleMaps.circle) {
-				// 			staddressmap.GoogleMaps.circle.setMap(null);
-				// 		}
-				//
-				// 		staddressmap.GoogleMaps.circle = new google.maps.Circle({
-				// 			center: results[0].geometry.location,
-				// 			radius: radius,
-				// 			fillOpacity: 0.35,
-				// 			fillColor: '#FF0000',
-				// 			map: staddressmap.GoogleMaps.map
-				// 		});
-				//
-				// 		var bounds = new google.maps.LatLngBounds();
-				// 		for (var i = 0; i < staddressmap.GoogleMaps.marker.length;i++) {
-				// 			if (google.maps.geometry.spherical.computeDistanceBetween(staddressmap.GoogleMaps.markers[i].getPosition(),marker.getPosition()) < radius) {
-				// 				bounds.extend(staddressmap.GoogleMaps.markers[i].getPosition());
-				// 				staddressmap.GoogleMaps.markers[i].setMap(staddressmap.GoogleMaps.map);
-				// 			} else {
-				// 				staddressmap.GoogleMaps.markers[i].setMap(null);
-				// 			}
-				// 		}
-				// 		staddressmap.GoogleMaps.map.fitBounds(bounds);
-				// 	} else {
-				// 		alert('Geocode was not successful for the following reason: ' + status);
-				// 	}
-				// });
 			}
 		}
 	};
