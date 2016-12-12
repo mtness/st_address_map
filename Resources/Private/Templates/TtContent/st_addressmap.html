@@ -1,32 +1,20 @@
-<f:if condition="{data.header}">
-    {data.header}<br />
-</f:if>
-
-<f:if condition="{data.tx_staddressmap_st_addressmap_mapheight}">
-    {data.tx_staddressmap_st_addressmap_mapheight}<br />
-</f:if>
-
-<f:if condition="{data.tx_staddressmap_st_addressmap_mapwidth}">
-    {data.tx_staddressmap_st_addressmap_mapwidth}<br />
-</f:if>
-
-<f:if condition="{data.tx_staddressmap_st_addressmap_startzoom}">
-    {data.tx_staddressmap_st_addressmap_startzoom}<br />
-</f:if>
-
-<f:if condition="{data.tx_staddressmap_st_addressmap_detailzoom}">
-    {data.tx_staddressmap_st_addressmap_detailzoom}<br />
-</f:if>
-
-<f:if condition="{data.tx_staddressmap_st_addressmap_centercoordinates}">
-    {data.tx_staddressmap_st_addressmap_centercoordinates}<br />
-</f:if>
-
-<f:if condition="{data.tx_staddressmap_st_addressmap_addresslist}">
-    <f:switch expression="{data.tx_staddressmap_st_addressmap_addresslist}">
-        <f:case value="1">Value is: 1</f:case>
-        <f:case value="2">Value is: 2</f:case>
-        <f:case value="3">Value is: 3</f:case>
-    </f:switch><br />
-</f:if>
-
+<div id="c{data.uid}"
+	 class="staddressmap"
+	 data-staddressmap-height="{data.tx_staddressmap_st_addressmap_mapheight}"
+	 data-staddressmap-startzoom="{data.tx_staddressmap_st_addressmap_startzoom}"
+	 data-staddressmap-detailzoom="{data.tx_staddressmap_st_addressmap_detailzoom}"
+	 data-staddressmap-centercoordinates="{data.tx_staddressmap_st_addressmap_centercoordinates}">
+	<div class="staddressmap__filter">
+		<input class="staddressmap__searchfrompoint" placeholder="PLZ oder Stadt" value="" type="text">
+		<select class="staddressmap__searchradius" size="1">
+			<option value="5">Umkreis 5 Km</option>
+			<option value="10">Umkreis 10 Km</option>
+			<option value="20" selected="selected">Umkreis 20 Km</option>
+			<option value="50">Umkreis 50 Km</option>
+			<option value="100">Umkreis 100 Km</option>
+		</select>
+		<button class="staddressmap__searchsubmit" role="button">Suchen</button>
+	</div>
+	<div class="staddressmap__googlemap" style="height: {data.tx_staddressmap_st_addressmap_mapheight}px;"></div>
+	<f:if condition="{data_tx_staddressmap_st_addressmap_addresselement}"><f:for each="{data_tx_staddressmap_st_addressmap_addresselement}" as="content_item"><f:cObject typoscriptObjectPath="tt_content" data="{content_item.data}" /></f:for></f:if>
+</div>

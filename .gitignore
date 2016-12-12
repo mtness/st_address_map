@@ -4,6 +4,7 @@ msi.iws
 nbproject/
 .sass-cache/
 .svn/
+Resources/Private/Source/node_modules
 
 
 # OS spezielle Dateien

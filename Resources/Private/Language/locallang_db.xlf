@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.0">
-  <file source-language="en" datatype="plaintext" original="messages" date="2016-12-08T23:07:05+00:00" product-name="st_address_map">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-12-09T19:43:07+00:00" product-name="st_address_map">
     <header/>
     <body>
-      <trans-unit id="tt_content.tx_staddressmap_st_addressmap_addresslist" xml:space="preserve">
-        <source>Addresslist</source>
+      <trans-unit id="tt_content.tx_staddressmap_st_addressmap_addresselement" xml:space="preserve">
+        <source>Addresslist Element</source>
       </trans-unit>
       <trans-unit id="tt_content.tx_staddressmap_st_addressmap_centercoordinates" xml:space="preserve">
         <source>Start coordinates</source>
@@ -14,9 +14,6 @@
       </trans-unit>
       <trans-unit id="tt_content.tx_staddressmap_st_addressmap_mapheight" xml:space="preserve">
         <source>Map height</source>
-      </trans-unit>
-      <trans-unit id="tt_content.tx_staddressmap_st_addressmap_mapwidth" xml:space="preserve">
-        <source>Map width</source>
       </trans-unit>
       <trans-unit id="tt_content.tx_staddressmap_st_addressmap_startzoom" xml:space="preserve">
         <source>Start zoom</source>

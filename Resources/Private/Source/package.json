@@ -1,0 +1,30 @@
+{
+  "name": "st_address_map",
+  "version": "1.0.0",
+  "description": "The frontend build tasks for st_address_map",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scheibome/st_address_map.git"
+  },
+  "author": {
+    "name": "Thomas Scheibitz",
+    "email": "hello@scheibitz.com",
+    "url": "https://www.scheibitz.com"
+  },
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/scheibome/st_address_map/issues"
+  },
+  "homepage": "https://github.com/scheibome/st_address_map#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0"
+  }
+}

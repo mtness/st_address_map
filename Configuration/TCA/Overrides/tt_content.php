@@ -1,28 +1,52 @@
 <?php
 $tempColumns = array (
-  'tx_staddressmap_st_addressmap_addresslist' => 
+  'tx_staddressmap_st_addressmap_addresselement' =>
   array (
-    'config' => 
+    'config' =>
     array (
-      'type' => 'select',
-      'renderType' => 'selectSingleBox',
-      'foreign_table' => 'sys_category',
+      'type' => 'inline',
+      'foreign_table' => 'tt_content',
+      'foreign_record_defaults' =>
+      array (
+        'colPos' => '999',
+      ),
+      'foreign_sortby' => 'sorting',
+      'appearance' =>
+      array (
+        'collapseAll' => '1',
+        'levelLinksPosition' => 'top',
+        'showSynchronizationLink' => '1',
+        'showPossibleLocalizationRecords' => '1',
+        'showAllLocalizationLink' => '1',
+        'useSortable' => '1',
+        'enabledControls' =>
+        array (
+          'dragdrop' => '1',
+        ),
+      ),
+      'minitems' => '1',
+      'maxitems' => '1',
+      'behaviour' =>
+      array (
+        'localizationMode' => 'select',
+      ),
+      'foreign_field' => 'tx_staddressmap_st_addressmap_addresselement_parent',
     ),
     'exclude' => '1',
-    'label' => 'LLL:EXT:st_address_map/Resources/Private/Language/locallang_db.xlf:tt_content.tx_staddressmap_st_addressmap_addresslist',
+    'label' => 'LLL:EXT:st_address_map/Resources/Private/Language/locallang_db.xlf:tt_content.tx_staddressmap_st_addressmap_addresselement',
   ),
-  'tx_staddressmap_st_addressmap_centercoordinates' => 
+  'tx_staddressmap_st_addressmap_centercoordinates' =>
   array (
-    'config' => 
+    'config' =>
     array (
       'type' => 'input',
     ),
     'exclude' => '1',
     'label' => 'LLL:EXT:st_address_map/Resources/Private/Language/locallang_db.xlf:tt_content.tx_staddressmap_st_addressmap_centercoordinates',
   ),
-  'tx_staddressmap_st_addressmap_detailzoom' => 
+  'tx_staddressmap_st_addressmap_detailzoom' =>
   array (
-    'config' => 
+    'config' =>
     array (
       'type' => 'input',
       'eval' => 'int',
@@ -30,9 +54,9 @@ $tempColumns = array (
     'exclude' => '1',
     'label' => 'LLL:EXT:st_address_map/Resources/Private/Language/locallang_db.xlf:tt_content.tx_staddressmap_st_addressmap_detailzoom',
   ),
-  'tx_staddressmap_st_addressmap_mapheight' => 
+  'tx_staddressmap_st_addressmap_mapheight' =>
   array (
-    'config' => 
+    'config' =>
     array (
       'type' => 'input',
       'eval' => 'int',
@@ -41,20 +65,9 @@ $tempColumns = array (
     'exclude' => '1',
     'label' => 'LLL:EXT:st_address_map/Resources/Private/Language/locallang_db.xlf:tt_content.tx_staddressmap_st_addressmap_mapheight',
   ),
-  'tx_staddressmap_st_addressmap_mapwidth' => 
+  'tx_staddressmap_st_addressmap_startzoom' =>
   array (
-    'config' => 
-    array (
-      'type' => 'input',
-      'eval' => 'int',
-      'placeholder' => '600',
-    ),
-    'exclude' => '1',
-    'label' => 'LLL:EXT:st_address_map/Resources/Private/Language/locallang_db.xlf:tt_content.tx_staddressmap_st_addressmap_mapwidth',
-  ),
-  'tx_staddressmap_st_addressmap_startzoom' => 
-  array (
-    'config' => 
+    'config' =>
     array (
       'type' => 'input',
       'eval' => 'int',
@@ -74,16 +87,16 @@ $GLOBALS['TCA']['tt_content']['columns']['CType']['config']['items'][] = array(
     'staddressmap_st_addressmap',
 );
 $tempTypes = array (
-  'staddressmap_st_addressmap' => 
+  'staddressmap_st_addressmap' =>
   array (
-    'columnsOverrides' => 
+    'columnsOverrides' =>
     array (
-      'bodytext' => 
+      'bodytext' =>
       array (
         'defaultExtras' => 'richtext:rte_transform[mode=ts_css]',
       ),
     ),
-    'showitem' => '--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.general;general,header,tx_staddressmap_st_addressmap_mapheight,tx_staddressmap_st_addressmap_mapwidth,tx_staddressmap_st_addressmap_startzoom,tx_staddressmap_st_addressmap_detailzoom,tx_staddressmap_st_addressmap_centercoordinates,tx_staddressmap_st_addressmap_addresslist,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.visibility;visibility,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access;access,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.extended,--div--;LLL:EXT:lang/locallang_tca.xlf:sys_category.tabs.category,categories',
+    'showitem' => '--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.general;general,header,tx_staddressmap_st_addressmap_mapheight,tx_staddressmap_st_addressmap_startzoom,tx_staddressmap_st_addressmap_detailzoom,tx_staddressmap_st_addressmap_centercoordinates,tx_staddressmap_st_addressmap_addresselement,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.visibility;visibility,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access;access,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.extended,--div--;LLL:EXT:lang/locallang_tca.xlf:sys_category.tabs.category,categories',
   ),
 );
 $GLOBALS['TCA']['tt_content']['types'] += $tempTypes;

@@ -1,0 +1,7 @@
+{
+  "dist": {
+    "base": "../../../Public/",
+    "js": "Javascripts/",
+    "css": "Stylesheets/"
+  }
+}
