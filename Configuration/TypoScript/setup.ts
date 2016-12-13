@@ -1,7 +1,7 @@
 <INCLUDE_TYPOSCRIPT: source="FILE:EXT:tt_address/static/pi1/setup.txt">
 
-tt_content.staddressmap_st_addressmap = FLUIDTEMPLATE
-tt_content.staddressmap_st_addressmap {
+tt_content.staddressmap_st_address_map = FLUIDTEMPLATE
+tt_content.staddressmap_st_address_map {
     file = EXT:st_address_map/Resources/Private/Templates/TtContent/st_address_map.html
     dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor
     dataProcessing.10 {
