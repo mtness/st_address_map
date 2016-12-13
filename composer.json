@@ -1,5 +1,5 @@
 {
-  "name": "staddressmap/st-address-map",
+  "name": "scheibo/st-address-map",
   "type": "typo3-cms-extension",
   "description": "With the extension st_address_map you are able to show addresses out of tt_address in Google Maps.",
   "keywords": [
