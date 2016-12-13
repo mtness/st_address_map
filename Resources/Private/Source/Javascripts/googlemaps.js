@@ -189,13 +189,11 @@ define([
 							visible: false
 						});
 
-						console.log('tester');
 						for (var i = 0; i < staddressmap.GoogleMaps.markers.length;i++) {
 							console.log('test');
 							if (google.maps.geometry.spherical.computeDistanceBetween(staddressmap.GoogleMaps.markers[i].getPosition(), marker.getPosition()) < radius) {
 								bounds.extend(staddressmap.GoogleMaps.markers[i].getPosition());
 								staddressmap.GoogleMaps.markers[i].setMap(staddressmap.GoogleMaps.map);
-								staddressmap.GoogleMaps.map.fitBounds(bounds);
 							} else {
 								staddressmap.GoogleMaps.markers[i].setMap(null);
 							}
