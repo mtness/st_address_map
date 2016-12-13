@@ -1,6 +1,6 @@
 {
   "dist": {
-    "base": "../../../Public/",
+    "base": "./../../Public/",
     "js": "Javascripts/",
     "css": "Stylesheets/"
   }

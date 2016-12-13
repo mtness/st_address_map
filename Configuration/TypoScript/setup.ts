@@ -47,10 +47,10 @@ page {
 	footerData.876 {
 		stdWrap.noTrimWrap = |<script |></script>|
 		10 = TEXT
-		10.stdWrap.dataWrap = data-main="{$PATH.JAVASCRIPTS}/staddressmap"
+		10.stdWrap.dataWrap = data-main="{$plugin.tx_staddressmap.settings.javascripts}/staddressmap"
 		10.stdWrap.noTrimWrap = || |
 		20 = TEXT
-		20.stdWrap.dataWrap = src="{$PATH.JAVASCRIPTS}/Vendor/require.js"
+		20.stdWrap.dataWrap = src="{$plugin.tx_staddressmap.settings.javascripts}/Vendor/require.js"
 		20.stdWrap.noTrimWrap = || |
 	}
 }

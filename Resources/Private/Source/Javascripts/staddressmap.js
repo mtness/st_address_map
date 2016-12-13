@@ -18,4 +18,3 @@ if (staddressmap.length > 0) {
 		require(['googleautocomplete']);
 	}
 }
-

@@ -27,15 +27,16 @@ gulp.task('css', function() {
 });
 
 gulp.task('js', function() {
-	gulp.src([__dirname + '/JavaScripts/**/*.js'])
+	gulp.src([__dirname + '/Javascripts/**/*.js'])
 		.pipe(plumber())
 		.pipe(uglify())
 		.pipe(gulp.dest(project.js));
+	console.log(project.js);
 });
 
 gulp.task('watch', function() {
 	gulp.watch(__dirname + '/Sass/**/*.scss', ['css']);
-	gulp.watch(__dirname + '/JavaScripts/*.js', ['js']);
+	gulp.watch(__dirname + '/Javascripts/*.js', ['js']);
 });
 
 gulp.task('default', ['css', 'js', 'watch']);
