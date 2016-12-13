@@ -6,7 +6,7 @@ requirejs.config({
 	paths: {
 		async: 'Vendor/async'
 	},
-	baseUrl: '/typo3conf/ext/st_address_map/Resources/Public/JavaScripts'
+	baseUrl: '/typo3conf/ext/st_address_map/Resources/Public/Javascripts'
 });
 
 if (staddressmap.length > 0) {
