@@ -4,17 +4,17 @@ tt_content.staddressmap_st_addressmap = FLUIDTEMPLATE
 tt_content.staddressmap_st_addressmap {
     file = EXT:st_address_map/Resources/Private/Templates/TtContent/st_addressmap.html
     dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor
-    dataProcessing.10 {
-        if.isTrue.field = tx_staddressmap_st_addressmap_addresselement
-        table = tt_content
-        pidInList.field = pid
-        where = tx_staddressmap_st_addressmap_addresselement_parent=###uid### AND deleted=0 AND hidden=0 AND 1=1 AND colPos='999'
-        orderBy = sorting
-        markers {
-            uid.field = uid
-        }
-        as = data_tx_staddressmap_st_addressmap_addresselement
-    }
+	dataProcessing.10 {
+		if.isTrue.field = tx_staddressmap_st_addressmap_addresselement
+		table = tt_content
+		pidInList.field = pid
+		where = tx_staddressmap_st_addressmap_addresselement_parent=###uid### AND deleted=0 AND hidden=0 AND 1=1 AND colPos='999'
+		orderBy = sorting
+		markers {
+			uid.field = uid
+		}
+		as = data_tx_staddressmap_st_addressmap_addresselement
+	}
 
     settings {
         tx_staddressmap {

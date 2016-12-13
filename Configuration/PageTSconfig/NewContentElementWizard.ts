@@ -4,6 +4,7 @@ mod.wizards.newContentElement.wizardItems.common {
                 iconIdentifier = content-textpic
                 title = LLL:EXT:st_address_map/Resources/Private/Language/locallang_db_new_content_el.xlf:wizards.newContentElement.st_addressmap_title
                 description = LLL:EXT:st_address_map/Resources/Private/Language/locallang_db_new_content_el.xlf:wizards.newContentElement.st_addressmap_description
+                icon = EXT:st_address_map/Resources/Public/Icons/st_address_map.svg
                 tt_content_defValues {
                     CType = staddressmap_st_addressmap
                 }

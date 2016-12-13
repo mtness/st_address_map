@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.0">
-  <file source-language="en" datatype="plaintext" original="messages" date="2016-12-09T19:43:07+00:00" product-name="st_address_map">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-12-13T15:54:53+00:00" product-name="st_address_map">
     <header/>
     <body>
       <trans-unit id="tt_content.tx_staddressmap_st_addressmap_addresselement" xml:space="preserve">
@@ -10,10 +10,13 @@
         <source>Map height</source>
       </trans-unit>
       <trans-unit id="tt_content.CType.div._staddressmap_" xml:space="preserve">
-        <source>_staddressmap_</source>
+        <source>st_address_map</source>
       </trans-unit>
       <trans-unit id="tt_content.CType.staddressmap_st_addressmap" xml:space="preserve">
         <source>Address visualization with Google Maps</source>
+      </trans-unit>
+      <trans-unit id="tt_content.colPos.nestedContentColPos" xml:space="preserve">
+        <source>Nested content (st_address_map)</source>
       </trans-unit>
     </body>
   </file>
