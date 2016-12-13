@@ -12,6 +12,6 @@
 		</select>
 		<button class="staddressmap__searchsubmit" role="button">Suchen</button>
 	</div>
-	<div class="staddressmap__googlemap" style="height: {data.tx_staddressmap_mapheight}px;"></div>
+	<div class="staddressmap__googlemap" style="height: {data.tx_staddressmap_mapheight};"></div>
 	<f:if condition="{data_tx_staddressmap_addresses}"><f:for each="{data_tx_staddressmap_addresses}" as="content_item"><f:cObject typoscriptObjectPath="tt_content" data="{content_item.data}" /></f:for></f:if>
 </div>

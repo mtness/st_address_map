@@ -95,7 +95,6 @@ define([
 			 */
 			createMarkers: function() {
 				var bounds = new google.maps.LatLngBounds();
-
 				staddressmap.GoogleMaps.items.forEach(function(item, i) {
 					var lat = item.getAttribute('data-staddressmap-latitude');
 					var lng = item.getAttribute('data-staddressmap-longitude');
@@ -118,7 +117,7 @@ define([
 				});
 
 				// auto center if more POI
-				if (1 < staddressmap.GoogleMaps.items.length) {
+				if (0 < staddressmap.GoogleMaps.items.length) {
 					staddressmap.GoogleMaps.map.fitBounds(bounds);
 				}
 			},
@@ -190,7 +189,6 @@ define([
 						});
 
 						for (var i = 0; i < staddressmap.GoogleMaps.markers.length;i++) {
-							console.log('test');
 							if (google.maps.geometry.spherical.computeDistanceBetween(staddressmap.GoogleMaps.markers[i].getPosition(), marker.getPosition()) < radius) {
 								bounds.extend(staddressmap.GoogleMaps.markers[i].getPosition());
 								staddressmap.GoogleMaps.markers[i].setMap(staddressmap.GoogleMaps.map);

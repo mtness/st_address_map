@@ -5,4 +5,11 @@
     margin: 0 0 1rem 0;
     padding: 1rem;
   }
+
+  &__searchfrompoint,
+  &__searchradius {
+    display: block;
+    padding: 10px;
+    width: 400px;
+  }
 }
