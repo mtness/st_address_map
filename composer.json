@@ -1,0 +1,33 @@
+{
+  "name": "staddressmap/st-address-map",
+  "type": "typo3-cms-extension",
+  "description": "With the extension st_address_map you are able to show addresses out of tt_address in Google Maps.",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "addresses",
+    "googlemaps"
+  ],
+  "homepage": "http://addressmap.scheibitz.com",
+  "authors": [
+    {
+      "name": "Thomas Scheibitz",
+      "role": "Developer"
+    }
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms-core": ">=7.6,<8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "STADDRESSMAP\\StAddressMap\\": "Classes"
+    }
+  },
+  "replace": {
+    "st_address_map": "self.version",
+    "typo3-ter/st-address-map": "self.version"
+  }
+}
