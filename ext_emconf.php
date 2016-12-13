@@ -1,5 +1,4 @@
 <?php
-
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'Address visualization with Google Maps',
     'description' => 'With the extension st_address_map you are able to show addresses out of tt_address in Google Maps.',
