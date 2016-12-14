@@ -37,7 +37,12 @@ define([
 			/**
 			 * Address items
 			 */
-			items: document.querySelectorAll('[data-mapmarkercontent]'),
+			items: document.querySelectorAll('[data-mapmarkeritem]'),
+
+			/**
+			 * Address content
+			 */
+			markercontent: document.querySelectorAll('[data-mapmarkercontent]'),
 
 			/**
 			 * Mapdiv
@@ -99,7 +104,7 @@ define([
 					var lat = item.getAttribute('data-staddressmap-latitude');
 					var lng = item.getAttribute('data-staddressmap-longitude');
 					var markertitle = item.getAttribute('data-staddressmap-markertitle');
-					var markercontent = item.innerHTML;
+					var markercontent = staddressmap.GoogleMaps.markercontent[i];
 					var point = new google.maps.LatLng(lat, lng);
 
 					staddressmap.GoogleMaps.createMarker(point, markertitle, markercontent);
@@ -132,6 +137,7 @@ define([
 				google.maps.event.addListener(staddressmap.GoogleMaps.marker, 'click', function() {
 					staddressmap.GoogleMaps.infowindow.setContent(html);
 					staddressmap.GoogleMaps.infowindow.open(staddressmap.GoogleMaps.map, this);
+
 				});
 				staddressmap.GoogleMaps.markers.push(staddressmap.GoogleMaps.marker);
 			},
