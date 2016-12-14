@@ -3,15 +3,19 @@
 	 data-staddressmap-googleapikey="{settings.tx_staddressmap.googleApiKey}">
 	<div class="staddressmap__googlemap" style="height: {data.tx_staddressmap_mapheight};"></div>
 	<div class="staddressmap__filter">
-		<input class="staddressmap__searchfrompoint" placeholder="PLZ oder Stadt" value="" type="text">
-		<select class="staddressmap__searchradius" size="1">
-			<option value="5">Umkreis 5 Km</option>
-			<option value="10">Umkreis 10 Km</option>
-			<option value="20" selected="selected">Umkreis 20 Km</option>
-			<option value="50">Umkreis 50 Km</option>
-			<option value="100">Umkreis 100 Km</option>
-		</select>
-		<button class="staddressmap__searchsubmit" role="button">Suchen</button>
+		<input class="staddressmap__input staddressmap__searchfrompoint" placeholder="PLZ oder Stadt" value="" type="text">
+		<div class="staddressmap__selectfield">
+			<select class="staddressmap__select staddressmap__searchradius" size="1">
+				<option value="5">Umkreis 5 Km</option>
+				<option value="10">Umkreis 10 Km</option>
+				<option value="20" selected="selected">Umkreis 20 Km</option>
+				<option value="50">Umkreis 50 Km</option>
+				<option value="100">Umkreis 100 Km</option>
+			</select>
+		</div>
+
+		<button class="staddressmap__button staddressmap__searchreset" role="button" type="reset">Zurücksetzen</button>
+		<button class="staddressmap__button staddressmap__searchsubmit" role="button">Suchen</button>
 	</div>
 	<f:if condition="{data_tx_staddressmap_addresses}"><f:for each="{data_tx_staddressmap_addresses}" as="content_item"><f:cObject typoscriptObjectPath="tt_content" data="{content_item.data}" /></f:for></f:if>
 </div>

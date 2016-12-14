@@ -90,9 +90,14 @@ define([
 			searchradius: document.querySelectorAll('.staddressmap__searchradius')[0],
 
 			/**
-			 * RadiusDropdown
+			 * Searchbutton
 			 */
 			searchsubmit: document.querySelectorAll('.staddressmap__searchsubmit')[0],
+
+			/**
+			 * Resetbutton
+			 */
+			searchreset: document.querySelectorAll('.staddressmap__searchreset')[0],
 
 			init: function() {
 				if (staddressmap.GoogleMaps.items.length) {
@@ -107,6 +112,10 @@ define([
 
 					staddressmap.GoogleMaps.searchsubmit.addEventListener('click', function() {
 						staddressmap.GoogleMaps.createRadius();
+					});
+
+					staddressmap.GoogleMaps.searchreset.addEventListener('click', function() {
+						staddressmap.GoogleMaps.createMarkers();
 					});
 				}
 			},
@@ -129,6 +138,11 @@ define([
 			 * create the google maps makers
 			 */
 			createMarkers: function() {
+
+				for (var i = 0; i < staddressmap.GoogleMaps.items.length;i++) {
+					staddressmap.GoogleMaps.items[i].classList.remove(staddressmap.GoogleMaps.hiddenclassname);
+				}
+
 				var bounds = new google.maps.LatLngBounds();
 				staddressmap.GoogleMaps.items.forEach(function(item, i) {
 					var lat = item.getAttribute('data-staddressmap-latitude');
