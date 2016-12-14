@@ -10,6 +10,36 @@ define([
 		GoogleMaps: {
 
 			/**
+			 * Class of hidden element in list
+			 */
+			hiddenclassname: 'staddressmap__hiddenlistitem',
+
+			/**
+			 * Selector of distance wrapper
+			 */
+			distancewrapper: '.staddressmap__distance',
+
+			/**
+			 * Class of distance wrapper when is filled
+			 */
+			distanceWrapperShowClassname: 'staddressmap__distance--show',
+
+			/**
+			 * Radius color
+			 */
+			radiuscolor: '#FF0000',
+
+			/**
+			 * Radius opacity
+			 */
+			radiusopacity: 0.35,
+
+			/**
+			 * Radius strokeweight
+			 */
+			radiusstrokeweight: 0,
+
+			/**
 			 * Map object
 			 */
 			map: null,
@@ -167,8 +197,9 @@ define([
 						staddressmap.GoogleMaps.circle = new google.maps.Circle({
 							center: results[0].geometry.location,
 							radius: radius,
-							fillOpacity: 0.35,
-							fillColor: '#FF0000',
+							fillOpacity: staddressmap.GoogleMaps.radiusopacity,
+							fillColor: staddressmap.GoogleMaps.radiuscolor,
+							strokeWeight: staddressmap.GoogleMaps.radiusstrokeweight,
 							map: staddressmap.GoogleMaps.map
 						});
 						staddressmap.GoogleMaps.map.fitBounds(staddressmap.GoogleMaps.circle.getBounds());
@@ -180,11 +211,27 @@ define([
 						});
 
 						for (var i = 0; i < staddressmap.GoogleMaps.markers.length;i++) {
-							if (google.maps.geometry.spherical.computeDistanceBetween(staddressmap.GoogleMaps.markers[i].getPosition(), marker.getPosition()) < radius) {
-								bounds.extend(staddressmap.GoogleMaps.markers[i].getPosition());
-								staddressmap.GoogleMaps.markers[i].setMap(staddressmap.GoogleMaps.map);
+							var currentMarker = staddressmap.GoogleMaps.markers[i];
+							var distanceBetween = google.maps.geometry.spherical.computeDistanceBetween(currentMarker.getPosition(), marker.getPosition());
+							var distanceMarkerItem = staddressmap.GoogleMaps.items[i].querySelectorAll(staddressmap.GoogleMaps.distancewrapper)[0];
+							if (distanceBetween < radius) {
+								bounds.extend(currentMarker.getPosition());
+								currentMarker.setMap(staddressmap.GoogleMaps.map);
+								console.log(bounds);
+
+								// show element in list
+								staddressmap.GoogleMaps.items[i].classList.remove(staddressmap.GoogleMaps.hiddenclassname);
+
+								// add the Distance in the listitem
+								distanceMarkerItem.innerHTML = Math.round((distanceBetween / 1000) * 100) / 100 + ' km';
+								distanceMarkerItem.classList.add(staddressmap.GoogleMaps.distanceWrapperShowClassname);
 							} else {
-								staddressmap.GoogleMaps.markers[i].setMap(null);
+								// hide marker if not in the radius
+								currentMarker.setMap(null);
+
+								// hide element in list
+								staddressmap.GoogleMaps.items[i].classList.add(staddressmap.GoogleMaps.hiddenclassname);
+								distanceMarkerItem.classList.remove(staddressmap.GoogleMaps.distanceWrapperShowClassname);
 							}
 						}
 					} else {

@@ -1,5 +1,17 @@
 .staddressmap {
 
+  &__hiddenlistitem {
+    display: none;
+  }
+
+  &__distance {
+    display: none;
+
+    &--show {
+      display: inline;
+    }
+  }
+
   .vcard {
     background-color: #e5e5e5;
     margin: 0 0 1rem 0;
