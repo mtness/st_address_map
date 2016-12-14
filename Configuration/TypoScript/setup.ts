@@ -36,6 +36,9 @@ plugin.tx_ttaddress_pi1 {
 
             longitude.cObject = TEXT
             longitude.cObject.field = longitude
+
+            markertitle.cObject = TEXT
+            markertitle.cObject.field = name
         }
     }
 }

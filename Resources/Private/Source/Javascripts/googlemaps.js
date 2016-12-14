@@ -98,17 +98,11 @@ define([
 				staddressmap.GoogleMaps.items.forEach(function(item, i) {
 					var lat = item.getAttribute('data-staddressmap-latitude');
 					var lng = item.getAttribute('data-staddressmap-longitude');
-					var markertitle = 'This is a Test';
-					// var markertitle = $(this).data('mapmarkertitle'); TODO: Add here js
+					var markertitle = item.getAttribute('data-staddressmap-markertitle');
 					var markercontent = item.innerHTML;
 					var point = new google.maps.LatLng(lat, lng);
 
-					staddressmap.GoogleMaps.createMarker(
-						point,
-						markertitle,
-						'<div class="addressmarkercontent">' + markercontent + '</div>',
-						1
-					);
+					staddressmap.GoogleMaps.createMarker(point, markertitle, markercontent);
 					bounds.extend(point);
 					if (i === 0) {
 						staddressmap.GoogleMaps.map.setCenter(point);
@@ -125,8 +119,7 @@ define([
 			/**
 			 * add the markers in the Map
 			 */
-			createMarker: function(latlng, name, html, category, open) {
-				// var marker = new google.maps.Marker({
+			createMarker: function(latlng, name, html) {
 				staddressmap.GoogleMaps.marker = new google.maps.Marker({
 					position: latlng,
 					// icon: '/typo3conf/ext/in2template/Resources/Public/Images/mapsballoon.png',
@@ -135,19 +128,12 @@ define([
 					zIndex: Math.round(latlng.lat() * -100000) << 5
 				});
 
-				// marker.mycategory = category;
 				staddressmap.GoogleMaps.marker.myname = name;
-				staddressmap.GoogleMaps.markers.push(staddressmap.GoogleMaps.marker);
-
-				if (open) {
-					staddressmap.GoogleMaps.infowindow.setContent(html);
-					staddressmap.GoogleMaps.infowindow.open(staddressmap.GoogleMaps.map, staddressmap.GoogleMaps.marker);
-				}
-
 				google.maps.event.addListener(staddressmap.GoogleMaps.marker, 'click', function() {
 					staddressmap.GoogleMaps.infowindow.setContent(html);
-					staddressmap.GoogleMaps.infowindow.open(staddressmap.GoogleMaps.map, staddressmap.GoogleMaps.marker);
+					staddressmap.GoogleMaps.infowindow.open(staddressmap.GoogleMaps.map, this);
 				});
+				staddressmap.GoogleMaps.markers.push(staddressmap.GoogleMaps.marker);
 			},
 
 			setMapOnAll: function(map) {
