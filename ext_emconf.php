@@ -15,8 +15,5 @@ $EM_CONF[$_EXTKEY] = array(
         ),
         'conflicts' => array(),
         'suggests' => array(),
-    ),
-    'autoload' => array(
-        'psr-4' => array('STADDRESSMAP\\StAddressMap\\' => 'Classes')
-    ),
+    )
 );
