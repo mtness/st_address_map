@@ -1,6 +1,5 @@
 define([
 	'googlemaps',
-	'markerclusterer',
 	'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBxSk_ZAKOJlPzMRSpnTXVuTnftFTwpfTA&callback=initMap&libraries=places,geometry'
 	], function() {
 	'use strict';
@@ -24,11 +23,6 @@ define([
 			 * Marker object
 			 */
 			marker: null,
-
-			/**
-			 * Markercluster
-			 */
-			markerCluster: null,
 
 			/**
 			 * Markers object
@@ -70,16 +64,8 @@ define([
 			 */
 			searchsubmit: document.querySelectorAll('.staddressmap__searchsubmit')[0],
 
-			/**
-			 * Cluster options
-			 */
-			markerclusteroptions: [],
-
 			init: function() {
 				if (staddressmap.GoogleMaps.items.length) {
-					staddressmap.GoogleMaps.markerclusteroptions = {
-						imagePath: '/typo3conf/ext/st_address_map/Resources/Public/Icons/m'
-					};
 					// start new map on load
 					google.maps.event.addDomListener(window, 'load', staddressmap.GoogleMaps.initializeGoogleMaps());
 					// center map on resize
@@ -132,11 +118,6 @@ define([
 				// auto center if more POI
 				if (0 < staddressmap.GoogleMaps.markers.length) {
 					staddressmap.GoogleMaps.map.fitBounds(bounds);
-					staddressmap.GoogleMaps.markerCluster = new MarkerClusterer(
-						staddressmap.GoogleMaps.map,
-						staddressmap.GoogleMaps.markers,
-						staddressmap.GoogleMaps.markerclusteroptions
-					);
 				}
 			},
 
@@ -174,7 +155,6 @@ define([
 				var address = staddressmap.GoogleMaps.searchfrompoint.value;
 				var radius = parseInt(staddressmap.GoogleMaps.searchradius.value, 10) * 1000;
 				staddressmap.GoogleMaps.clearMarkers(null);
-				staddressmap.GoogleMaps.markerCluster.clearMarkers();
 				var geocoder = new google.maps.Geocoder();
 				var bounds = new google.maps.LatLngBounds();
 				geocoder.geocode({address: address}, function(results, status) {

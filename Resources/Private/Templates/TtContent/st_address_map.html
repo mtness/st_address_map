@@ -1,6 +1,7 @@
 <div id="c{data.uid}"
 	 class="staddressmap"
 	 data-staddressmap-googleapikey="{settings.tx_staddressmap.googleApiKey.value}">
+	<div class="staddressmap__googlemap" style="height: {data.tx_staddressmap_mapheight};"></div>
 	<div class="staddressmap__filter">
 		<input class="staddressmap__searchfrompoint" placeholder="PLZ oder Stadt" value="" type="text">
 		<select class="staddressmap__searchradius" size="1">
@@ -12,6 +13,5 @@
 		</select>
 		<button class="staddressmap__searchsubmit" role="button">Suchen</button>
 	</div>
-	<div class="staddressmap__googlemap" style="height: {data.tx_staddressmap_mapheight};"></div>
 	<f:if condition="{data_tx_staddressmap_addresses}"><f:for each="{data_tx_staddressmap_addresses}" as="content_item"><f:cObject typoscriptObjectPath="tt_content" data="{content_item.data}" /></f:for></f:if>
 </div>
