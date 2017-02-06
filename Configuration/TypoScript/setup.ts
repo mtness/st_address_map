@@ -18,7 +18,8 @@ tt_content.staddressmap_st_address_map {
 
     settings {
         tx_staddressmap {
-            googleApiKey = {$plugin.tx_staddressmap.settings.googleApiKey}
+            webMapServices = {$plugin.tx_staddressmap.settings.webMapServices}
+            apiKey = {$plugin.tx_staddressmap.settings.apiKey}
         }
     }
 }

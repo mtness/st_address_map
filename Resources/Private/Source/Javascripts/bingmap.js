@@ -1,13 +1,13 @@
 define([
-	'googlemaps',
-	'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBxSk_ZAKOJlPzMRSpnTXVuTnftFTwpfTA&callback=initMap&libraries=places,geometry'
-	], function() {
+	'bingmap',
+	'async!https://www.bing.com/api/maps/mapcontrol?branch=experimental'
+], function() {
 	'use strict';
 
 	var staddressmap = {
 		location: window.location,
 
-		GoogleMaps: {
+		BingMap: {
 
 			/**
 			 * Class of hidden element in list
@@ -77,7 +77,7 @@ define([
 			/**
 			 * Mapdiv
 			 */
-			element: document.querySelectorAll('.staddressmap__googlemap')[0],
+			element: document.querySelectorAll('.staddressmap__map')[0],
 
 			/**
 			 * Addressfield
@@ -100,24 +100,35 @@ define([
 			searchreset: document.querySelectorAll('.staddressmap__searchreset')[0],
 
 			init: function() {
-				if (staddressmap.GoogleMaps.items.length) {
-					// start new map on load
-					google.maps.event.addDomListener(window, 'load', staddressmap.GoogleMaps.initializeGoogleMaps());
-					// center map on resize
-					google.maps.event.addDomListener(window, 'resize', function() {
-						var center = staddressmap.GoogleMaps.map.getCenter();
-						google.maps.event.trigger(staddressmap.GoogleMaps.map, 'resize');
-						staddressmap.GoogleMaps.map.setCenter(center);
-					});
+				console.log('teste');
 
-					staddressmap.GoogleMaps.searchsubmit.addEventListener('click', function() {
-						staddressmap.GoogleMaps.createRadius();
-					});
+				staddressmap.BingMap.map = new Microsoft.Maps.Map(staddressmap.BingMap.element, {
+					credentials: 'AoaPK47y-Kxe6t_cmrtFWDQzCjOGaJMofONHzpy3WCkf9RXaQuATQSv99rYjwxu0'
+				});
 
-					staddressmap.GoogleMaps.searchreset.addEventListener('click', function() {
-						staddressmap.GoogleMaps.createMarkers();
-					});
-				}
+				staddressmap.BingMap.createMarkers();
+
+				// var pushpin = new Microsoft.Maps.Pushpin(staddressmap.BingMap.map.getCenter(), null);
+				// staddressmap.BingMap.map.entities.push(pushpin);
+
+				// if (staddressmap.GoogleMaps.items.length) {
+				// 	// start new map on load
+				// 	google.maps.event.addDomListener(window, 'load', staddressmap.GoogleMaps.initializeGoogleMaps());
+				// 	// center map on resize
+				// 	google.maps.event.addDomListener(window, 'resize', function() {
+				// 		var center = staddressmap.GoogleMaps.map.getCenter();
+				// 		google.maps.event.trigger(staddressmap.GoogleMaps.map, 'resize');
+				// 		staddressmap.GoogleMaps.map.setCenter(center);
+				// 	});
+				//
+				// 	staddressmap.GoogleMaps.searchsubmit.addEventListener('click', function() {
+				// 		staddressmap.GoogleMaps.createRadius();
+				// 	});
+				//
+				// 	staddressmap.GoogleMaps.searchreset.addEventListener('click', function() {
+				// 		staddressmap.GoogleMaps.createMarkers();
+				// 	});
+				// }
 			},
 
 			/**
@@ -135,54 +146,67 @@ define([
 			},
 
 			/**
-			 * create the google maps makers
+			 * create the maps makers
 			 */
 			createMarkers: function() {
-
-				for (var i = 0; i < staddressmap.GoogleMaps.items.length;i++) {
-					staddressmap.GoogleMaps.items[i].classList.remove(staddressmap.GoogleMaps.hiddenclassname);
+				for (var i = 0; i < staddressmap.BingMap.items.length;i++) {
+					staddressmap.BingMap.items[i].classList.remove(staddressmap.BingMap.hiddenclassname);
 				}
 
-				var bounds = new google.maps.LatLngBounds();
-				staddressmap.GoogleMaps.items.forEach(function(item, i) {
+				// var bounds = new google.maps.LatLngBounds();
+				staddressmap.BingMap.items.forEach(function(item, i) {
 					var lat = item.getAttribute('data-staddressmap-latitude');
 					var lng = item.getAttribute('data-staddressmap-longitude');
 					var markertitle = item.getAttribute('data-staddressmap-markertitle');
-					var markercontent = staddressmap.GoogleMaps.markercontent[i];
-					var point = new google.maps.LatLng(lat, lng);
+					var markercontent = staddressmap.BingMap.markercontent[i];
+					staddressmap.BingMap.markers.push(new Microsoft.Maps.Location(lat, lng));
 
-					staddressmap.GoogleMaps.createMarker(point, markertitle, markercontent);
-					bounds.extend(point);
-					if (i === 0) {
-						staddressmap.GoogleMaps.map.setCenter(point);
-					}
+					// staddressmap.BingMap.createMarker(point, markertitle, markercontent);
+					// if (i === 0) {
+					// 	staddressmap.GoogleMaps.map.setCenter(point);
+					// }
 					i++;
 				});
 
+				console.log(staddressmap.BingMap.markers);
+				console.log(Microsoft.Maps.TestDataGenerator.getPushpins(10, staddressmap.BingMap.map.getBounds()));
+				staddressmap.BingMap.createMarker(staddressmap.BingMap.markers);
+
 				// auto center if more POI
-				if (0 < staddressmap.GoogleMaps.markers.length) {
-					staddressmap.GoogleMaps.map.fitBounds(bounds);
-				}
+				// if (0 < staddressmap.GoogleMaps.markers.length) {
+				// 	staddressmap.GoogleMaps.map.fitBounds(bounds);
+				// }
 			},
 
 			/**
 			 * add the markers in the Map
 			 */
-			createMarker: function(latlng, name, html) {
-				staddressmap.GoogleMaps.marker = new google.maps.Marker({
-					position: latlng,
-					// icon: '/typo3conf/ext/in2template/Resources/Public/Images/mapsballoon.png',
-					map: staddressmap.GoogleMaps.map,
-					title: name,
-					zIndex: Math.round(latlng.lat() * -100000) << 5
-				});
+			createMarker: function(pushpins) {
+				var layer = new Microsoft.Maps.Layer();
+				// layer.add(Microsoft.Maps.TestDataGenerator.getPushpins(10, staddressmap.BingMap.map.getBounds()));
+				layer.add(staddressmap.BingMap.markers);
+				staddressmap.BingMap.map.layers.insert(layer);
 
-				staddressmap.GoogleMaps.marker.myname = name;
-				google.maps.event.addListener(staddressmap.GoogleMaps.marker, 'click', function() {
-					staddressmap.GoogleMaps.infowindow.setContent(html);
-					staddressmap.GoogleMaps.infowindow.open(staddressmap.GoogleMaps.map, this);
-				});
-				staddressmap.GoogleMaps.markers.push(staddressmap.GoogleMaps.marker);
+				// console.log(latlng);
+				// staddressmap.BingMap.map(latlng);
+				// var layer = new Microsoft.Maps.Layer();
+				// layer.add(latlng);
+				// staddressmap.BingMap.map.layers.insert(layer);
+
+				// staddressmap.GoogleMaps.marker = new google.maps.Marker({
+				// 	position: latlng,
+				// 	// icon: '/typo3conf/ext/in2template/Resources/Public/Images/mapsballoon.png',
+				// 	map: staddressmap.GoogleMaps.map,
+				// 	title: name,
+				// 	zIndex: Math.round(latlng.lat() * -100000) << 5
+				// });
+				//
+				// staddressmap.GoogleMaps.marker.myname = name;
+				// google.maps.event.addListener(staddressmap.GoogleMaps.marker, 'click', function() {
+				// 	staddressmap.GoogleMaps.infowindow.setContent(html);
+				// 	staddressmap.GoogleMaps.infowindow.open(staddressmap.GoogleMaps.map, this);
+				// });
+				// staddressmap.GoogleMaps.markers.push(staddressmap.GoogleMaps.marker);
 			},
 
 			setMapOnAll: function(map) {
@@ -256,5 +280,5 @@ define([
 		}
 	};
 
-	staddressmap.GoogleMaps.init();
+	staddressmap.BingMap.init();
 });

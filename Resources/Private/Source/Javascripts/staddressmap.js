@@ -1,6 +1,7 @@
 var staddressmap = document.querySelectorAll('.staddressmap');
+var webmapservice = staddressmap[0].getAttribute('data-staddressmap-webmapservices');
 var staddressmapsearchfrompoint = document.querySelectorAll('.staddressmap__searchfrompoint');
-var googelmapwrapper = document.querySelectorAll('.staddressmap__googlemap');
+var mapwrapper = document.querySelectorAll('.staddressmap__map');
 
 requirejs.config({
 	paths: {
@@ -14,12 +15,18 @@ requirejs.config({
 });
 
 if (staddressmap.length > 0) {
-	if (googelmapwrapper.length > 0) {
-		require(['googlemaps']);
-	}
+	// switch webmapservice
+	if (webmapservice === 'googlemap') {
+		if (mapwrapper.length > 0) {
+			require(['googlemaps']);
+		}
 
-
-	if (staddressmapsearchfrompoint.length > 0) {
-		require(['googleautocomplete']);
+		if (staddressmapsearchfrompoint.length > 0) {
+			require(['googleautocomplete']);
+		}
+	} else {
+		if (mapwrapper.length > 0) {
+			require(['bingmap']);
+		}
 	}
 }
