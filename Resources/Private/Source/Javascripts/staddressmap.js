@@ -10,7 +10,7 @@ requirejs.config({
 	},
 	baseUrl: '/typo3conf/ext/st_address_map/Resources/Public/Javascripts',
 	shim: {
-		googlemaps: ['markerclusterer']
+		googlemap: ['markerclusterer']
 	}
 });
 
@@ -18,7 +18,7 @@ if (staddressmap.length > 0) {
 	// switch webmapservice
 	if (webmapservice === 'googlemap') {
 		if (mapwrapper.length > 0) {
-			require(['googlemaps']);
+			require(['googlemap']);
 		}
 
 		if (staddressmapsearchfrompoint.length > 0) {
