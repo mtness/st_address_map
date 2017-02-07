@@ -140,11 +140,9 @@ define([
 					// 	description: 'teste',
 					// 	visible: true
 					// });
-					console.log(markertitle);
-					console.log(staddressmap.BingMap.infowindowTemplate.replace('{title}', markertitle).replace('{description}', markercontent));
 					var infobox = new Microsoft.Maps.Infobox(position, {
-						htmlContent: staddressmap.BingMap.infowindowTemplate.replace('{title}', markertitle).replace('{description}', markercontent),
-						visible: true
+						htmlContent: staddressmap.BingMap.infowindowTemplate.replace('###title###', markertitle).replace('###description###', markercontent.innerHTML),
+						visible: false
 					});
 					infobox.setMap(staddressmap.BingMap.map);
 					staddressmap.BingMap.markers.push(new Microsoft.Maps.Pushpin(position));
