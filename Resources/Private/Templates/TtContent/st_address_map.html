@@ -18,5 +18,8 @@
 		<button class="staddressmap__button staddressmap__searchreset" role="button" type="reset">Zurücksetzen</button>
 		<button class="staddressmap__button staddressmap__searchsubmit" role="button">Suchen</button>
 	</div>
+	<f:if condition="{settings.tx_staddressmap.webMapServices} == 'bingmap'">
+		<f:render partial="binginfowindow" arguments="{_all}"/>
+	</f:if>
 	<f:if condition="{data_tx_staddressmap_addresses}"><f:for each="{data_tx_staddressmap_addresses}" as="content_item"><f:cObject typoscriptObjectPath="tt_content" data="{content_item.data}" /></f:for></f:if>
 </div>
