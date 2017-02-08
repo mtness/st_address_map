@@ -112,6 +112,7 @@ define([
 				// TODO INFO: http://www.bing.com/api/maps/sdkrelease/mapcontrol/isdk#addDefaultInfobox+JS
 				// TODO INFO: https://msdn.microsoft.com/en-us/library/mt750265.aspx
 				// TODO INFO: http://stackoverflow.com/questions/7663993/multiple-pushpin-with-infobox-in-bing-map
+				// TODO INFO: https://blogs.bing.com/maps/May-2016-(1)/Pushpin-Clustering-in-Bing-Maps-V8
 				staddressmap.BingMap.createMarkers();
 			},
 
@@ -145,7 +146,10 @@ define([
 						visible: false
 					});
 					infobox.setMap(staddressmap.BingMap.map);
-					staddressmap.BingMap.markers.push(new Microsoft.Maps.Pushpin(position));
+					var marker = new Microsoft.Maps.Pushpin(position);
+					// TODO: Does not work
+					// Microsoft.Maps.Events.addHandler(marker, 'click', staddressmap.BingMap.openInfoWindow);
+					staddressmap.BingMap.markers.push(marker);
 					staddressmap.BingMap.infowindow.push(infobox);
 					i++;
 				});
@@ -163,6 +167,22 @@ define([
 			},
 
 			createRadius: function() {
+			},
+
+			openInfoWindow: function(e) {
+				// TODO: Does not work
+				if (e.targetType === 'pushpin') {
+					var pin = e.target;
+
+					console.log(pin);
+
+					staddressmap.BingMap.infowindow.setOptions({
+						visible:true
+					});
+
+					// set location of infobox
+					//staddressmap.BingMap.infowindow.setLocation(pin.getLocation());
+				}
 			}
 		}
 	};
