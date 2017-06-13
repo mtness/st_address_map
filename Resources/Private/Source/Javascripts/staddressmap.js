@@ -11,7 +11,9 @@ requirejs.config({
 	baseUrl: '/typo3conf/ext/st_address_map/Resources/Public/Javascripts',
 	shim: {
 		googlemap: ['markerclusterer']
-	}
+	},
+	urlArgs: 'v=0.0.1'
+	// urlArgs: 'v=' +  (new Date()).getTime() // Devline
 });
 
 if (staddressmap.length > 0) {

@@ -1,7 +1,9 @@
 <div id="c{data.uid}"
 	 class="staddressmap"
 	 data-staddressmap-apikey="{settings.tx_staddressmap.apiKey}"
-	 data-staddressmap-webmapservices="{settings.tx_staddressmap.webMapServices}">
+	 data-staddressmap-webmapservices="{settings.tx_staddressmap.webMapServices}"
+	 data-staddressmap-clustering="1"
+	 data-staddressmap-autozoom="1">
 	<div class="staddressmap__map" style="height: {data.tx_staddressmap_mapheight};"></div>
 	<div class="staddressmap__filter">
 		<input class="staddressmap__input staddressmap__searchfrompoint" placeholder="PLZ oder Stadt" value="" type="text">
