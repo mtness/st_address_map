@@ -99,7 +99,6 @@ define([
 			 */
 			searchreset: document.querySelectorAll('.staddressmap__searchreset')[0],
 
-
 			/**
 			 * Mapwarpper object
 			 */
@@ -131,7 +130,6 @@ define([
 			clusterGridSize: 100,
 
 			init: function() {
-
 				staddressmap.BingMap.map = new Microsoft.Maps.Map(staddressmap.BingMap.element, {
 					credentials: 'AoaPK47y-Kxe6t_cmrtFWDQzCjOGaJMofONHzpy3WCkf9RXaQuATQSv99rYjwxu0'
 				});

@@ -118,4 +118,23 @@ $summersky: #3498DB;
       margin: 0;
     }
   }
+
+  .infobox-close-img {
+    vertical-align: initial;
+  }
+
+  .infobox-body {
+    width: 250px;
+  }
+
+  .infobox-info {
+    padding-top: 0;
+    text-align: center;
+  }
+
+  .infobox-stalk {
+    left: 50%;
+    bottom: -16px !important;
+    transform: translate(-50%);
+  }
 }

@@ -12,8 +12,8 @@ requirejs.config({
 	shim: {
 		googlemap: ['markerclusterer']
 	},
-	urlArgs: 'v=0.0.1'
-	// urlArgs: 'v=' +  (new Date()).getTime() // Devline
+	// urlArgs: 'v=0.0.1'
+	urlArgs: 'RequireVersionReplaceByCompiling'
 });
 
 if (staddressmap.length > 0) {

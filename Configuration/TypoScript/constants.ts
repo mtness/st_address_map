@@ -1,3 +1,4 @@
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:tt_address/static/pi1/constants.txt">
 plugin.tx_staddressmap {
     settings {
         # googlemap | bingmap | openstreetmap

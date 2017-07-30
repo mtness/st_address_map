@@ -7,6 +7,9 @@ var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var plumber = require('gulp-plumber');
 var autoprefixer = require('gulp-autoprefixer');
+var replace = require('gulp-replace');
+var gulpif = require('gulp-if');
+var debug = getArg('--debug');
 var project = {
 	base: __dirname + json.dist.base,
 	css: __dirname + json.dist.base + json.dist.css,
@@ -29,9 +32,9 @@ gulp.task('css', function() {
 gulp.task('js', function() {
 	gulp.src([__dirname + '/Javascripts/**/*.js'])
 		.pipe(plumber())
-		.pipe(uglify())
+		.pipe(gulpif(!debug, uglify()))
+		.pipe(replace('RequireVersionReplaceByCompiling', Date.now()))
 		.pipe(gulp.dest(project.js));
-	console.log(project.js);
 });
 
 gulp.task('watch', function() {
@@ -40,3 +43,16 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['css', 'js', 'watch']);
+
+/**
+ * Get arguments from commandline
+ */
+function getArg(key) {
+	var argClean = key.replace('--', '').toUpperCase();
+	if (argClean in process.env) {
+		return process.env[argClean];
+	}
+	var index = process.argv.indexOf(key);
+	var next = process.argv[index + 1];
+	return (index < 0) ? null : (!next || next[0] === '-') ? true : next;
+}

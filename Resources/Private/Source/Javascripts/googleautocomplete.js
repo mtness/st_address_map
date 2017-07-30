@@ -1,6 +1,6 @@
 define([
 	'googleautocomplete',
-	'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBxSk_ZAKOJlPzMRSpnTXVuTnftFTwpfTA&callback=initMap&libraries=places,geometry'
+	'async!https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBxSk_ZAKOJlPzMRSpnTXVuTnftFTwpfTA&callback=initMap&libraries=places,geometry'
 ], function() {
 	'use strict';
 
